@@ -11,7 +11,7 @@ from tap.tests import TestCase
 from tap.tracker import Tracker
 
 
-class TestPytestPlugin(TestCase):
+class TestPlugin(TestCase):
 
     def setUp(self):
         """The pytest plugin uses module scope so a fresh tracker
