@@ -1,0 +1,2 @@
+include docs/releases.rst
+recursive-include pytest_tap/locale *
