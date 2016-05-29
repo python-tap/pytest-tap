@@ -9,8 +9,9 @@ import sys
 from py.io import TerminalWriter
 import pytest
 from tap.formatter import format_as_diagnostics
-from tap.i18n import _
 from tap.tracker import Tracker
+
+from pytest_tap.i18n import _
 
 # Because of how pytest hooks work, there is not much choice
 # except to use module level state. Ugh.
