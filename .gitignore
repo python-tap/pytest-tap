@@ -47,6 +47,7 @@ coverage.xml
 
 # Translations
 *.mo
+.transifex.ini
 
 # Django stuff:
 *.log
