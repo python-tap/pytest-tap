@@ -5,3 +5,4 @@ mock<1.1.0
 pytest-cov
 requests
 tox
+twine
