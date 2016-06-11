@@ -41,21 +41,21 @@ matrix:
     - os: linux
       python: 2.7
       env: TOX_ENV=language_fr
-    # - os: linux
-    #   python: 2.7
-    #   env: TOX_ENV=language_it
-    # - os: linux
-    #   python: 2.7
-    #   env: TOX_ENV=language_ja
-    # - os: linux
-    #   python: 2.7
-    #   env: TOX_ENV=language_nl
-    # - os: linux
-    #   python: 2.7
-    #   env: TOX_ENV=language_pt
-    # - os: linux
-    #   python: 2.7
-    #   env: TOX_ENV=language_ru
+    - os: linux
+      python: 2.7
+      env: TOX_ENV=language_it
+    - os: linux
+      python: 2.7
+      env: TOX_ENV=language_ja
+    - os: linux
+      python: 2.7
+      env: TOX_ENV=language_nl
+    - os: linux
+      python: 2.7
+      env: TOX_ENV=language_pt
+    - os: linux
+      python: 2.7
+      env: TOX_ENV=language_ru
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pyenv-virtualenv; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then virtualenv venv; fi
