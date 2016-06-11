@@ -32,9 +32,9 @@ matrix:
     - os: linux
       python: 2.7
       env: TOX_ENV=language_ar
-    # - os: linux
-    #   python: 2.7
-    #   env: TOX_ENV=language_de
+    - os: linux
+      python: 2.7
+      env: TOX_ENV=language_de
     - os: linux
       python: 2.7
       env: TOX_ENV=language_es
