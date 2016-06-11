@@ -11,7 +11,7 @@ LANGUAGES = [
     'ar',
     'de',
     'es',
-    # 'fr',
+    'fr',
     # 'it',
     # 'ja',
     # 'nl',
