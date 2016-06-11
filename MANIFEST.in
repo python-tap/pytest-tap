@@ -1,2 +1,6 @@
+include AUTHORS
+include LICENSE
+include README.rst
+include requirements.txt
 include docs/releases.rst
 recursive-include pytest_tap/locale *
