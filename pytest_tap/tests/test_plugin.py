@@ -5,14 +5,14 @@ try:
 except ImportError:
     import mock
 import tempfile
+import unittest
 
-from tap.tests import TestCase
 from tap.tracker import Tracker
 
 from pytest_tap import plugin
 
 
-class TestPlugin(TestCase):
+class TestPlugin(unittest.TestCase):
 
     def setUp(self):
         """The pytest plugin uses module scope so a fresh tracker
