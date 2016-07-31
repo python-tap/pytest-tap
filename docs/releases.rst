@@ -1,6 +1,13 @@
 Releases
 ========
 
+Version 2.0, In Development
+---------------------------
+
+* Update to tap.py 2.0.
+  This update drops the indirect dependencies on nose and pygments.
+* Drop support for Python 2.6
+
 Version 1.9, Released June 11, 2016
 -----------------------------------
 
