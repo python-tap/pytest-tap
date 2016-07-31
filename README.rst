@@ -47,7 +47,6 @@ This is an example usage from the plugin's test suite.
 .. code-block:: console
 
    $ py.test --tap-stream
-   # TAP results for TestPlugin
    ok 1 - TestPlugin.test_generates_reports_for_combined
    ok 2 - TestPlugin.test_generates_reports_for_files
    ok 3 - TestPlugin.test_generates_reports_for_stream

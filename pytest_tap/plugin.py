@@ -45,11 +45,19 @@ def pytest_configure(config):
         config.pluginmanager.unregister(reporter)
         tracker.streaming = True
         tracker.stream = sys.stdout
+        # A common pytest pattern is to use test functions without classes.
+        # The header looks really dumb for that pattern because it puts
+        # out a lot of line noise since every function gets its own header.
+        # Disable it automatically for streaming.
+        tracker.header = False
 
 
 def pytest_runtest_logreport(report):
     """Add a test result to the tracker."""
-    if report.when != 'call':
+    if not (
+        (report.when == 'setup' and report.outcome == 'skipped') or
+        report.when == 'call'
+    ):
         return
     description = report.location[2]
     testcase = description.split('.', 1)[0]
@@ -59,7 +67,10 @@ def pytest_runtest_logreport(report):
         diagnostics = _make_as_diagnostics(report)
         tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
     elif report.outcome == 'skipped':
-        reason = report.longrepr[2].split(':', 1)[1].strip()
+        if type(report.longrepr) is tuple:
+            reason = report.longrepr[2].split(':', 1)[1].strip()
+        else:
+            reason = report.wasxfail
         tracker.add_skip(testcase, description, reason)
 
 

@@ -44,6 +44,7 @@ class TestPlugin(unittest.TestCase):
         config.option.tap_stream = True
         plugin.pytest_configure(config)
         self.assertTrue(plugin.tracker.streaming)
+        self.assertFalse(plugin.tracker.header)
 
     def test_tracker_outdir_set(self):
         outdir = tempfile.mkdtemp()
@@ -86,11 +87,20 @@ class TestPlugin(unittest.TestCase):
         location = ('test_file.py', 1, 'TestFake.test_me')
         longrepr = ('', '', 'Skipped: a reason')
         report = mock.Mock(
-            when='call', outcome='skipped', location=location,
+            when='setup', outcome='skipped', location=location,
             longrepr=longrepr)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
             'TestFake', 'TestFake.test_me', 'a reason')
+
+    def test_tracks_xfail(self):
+        plugin.tracker = mock.Mock()
+        location = ('test_file.py', 1, 'TestFake.test_me')
+        report = mock.Mock(
+            when='call', outcome='skipped', location=location, wasxfail='')
+        plugin.pytest_runtest_logreport(report)
+        plugin.tracker.add_skip.assert_called_once_with(
+            'TestFake', 'TestFake.test_me', '')
 
     def test_generates_reports_for_stream(self):
         config = self._make_config()
