@@ -1,7 +1,7 @@
 Releases
 ========
 
-Version 2.0, In Development
+Version 2.0, August 1, 2016
 ---------------------------
 
 * Update to tap.py 2.0.
