@@ -1,6 +1,0 @@
-Babel
-flake8
-mock
-requests
-tox
-twine
