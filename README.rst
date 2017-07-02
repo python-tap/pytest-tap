@@ -1,7 +1,7 @@
 pytest-tap
 ==========
 
-|version| |license| |travis| |travisosx| |appveyor| |coverage|
+|version| |license| |travis| |travismac| |appveyor| |coverage|
 
 .. |version| image:: https://img.shields.io/pypi/v/pytest-tap.svg
     :target: https://pypi.python.org/pypi/pytest-tap
@@ -15,9 +15,9 @@ pytest-tap
 .. |travis| image:: https://img.shields.io/travis/python-tap/pytest-tap/master.svg?label=linux+build
     :target: https://travis-ci.org/python-tap/pytest-tap
     :alt: Linux status
-.. |travisosx| image:: https://img.shields.io/travis/python-tap/pytest-tap/master.svg?label=os+x+build
+.. |travismac| image:: https://img.shields.io/travis/python-tap/pytest-tap/master.svg?label=macOS+build
     :target: https://travis-ci.org/python-tap/pytest-tap
-    :alt: OS X status
+    :alt: macOS status
 .. |appveyor| image:: https://img.shields.io/appveyor/ci/mblayman/pytest-tap/master.svg?label=windows+build
     :target: https://ci.appveyor.com/project/mblayman/pytest-tap
     :alt: Windows status
