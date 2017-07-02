@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[dev-packages]
+babel = "*"
+flake8 = "*"
+mock = "*"
+requests = "*"
+tox = "*"
+twine = "*"
+
+[packages]
+pytest = "*"
+"tap.py" = "*"

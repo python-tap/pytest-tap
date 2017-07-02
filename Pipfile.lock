@@ -1,0 +1,99 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "8f44edaec28be3467a81eb18b1454ebee41949daaa1a53f68a91345c1422cacb"
+        },
+        "requires": {},
+        "sources": [
+            {
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "py": {
+            "version": "==1.4.34"
+        },
+        "pytest": {
+            "version": "==3.1.2"
+        },
+        "setuptools": {
+            "version": "==36.0.1"
+        },
+        "tap.py": {
+            "version": "==2.1"
+        }
+    },
+    "develop": {
+        "babel": {
+            "version": "==2.4.0"
+        },
+        "certifi": {
+            "version": "==2017.4.17"
+        },
+        "chardet": {
+            "version": "==3.0.4"
+        },
+        "flake8": {
+            "version": "==3.3.0"
+        },
+        "idna": {
+            "version": "==2.5"
+        },
+        "mccabe": {
+            "version": "==0.6.1"
+        },
+        "mock": {
+            "version": "==2.0.0"
+        },
+        "pbr": {
+            "version": "==3.1.1"
+        },
+        "pkginfo": {
+            "version": "==1.4.1"
+        },
+        "pluggy": {
+            "version": "==0.4.0"
+        },
+        "py": {
+            "version": "==1.4.34"
+        },
+        "pycodestyle": {
+            "version": "==2.3.1"
+        },
+        "pyflakes": {
+            "version": "==1.5.0"
+        },
+        "pytz": {
+            "version": "==2017.2"
+        },
+        "requests": {
+            "version": "==2.18.1"
+        },
+        "requests-toolbelt": {
+            "version": "==0.8.0"
+        },
+        "setuptools": {
+            "version": "==36.0.1"
+        },
+        "six": {
+            "version": "==1.10.0"
+        },
+        "tox": {
+            "version": "==2.7.0"
+        },
+        "tqdm": {
+            "version": "==4.14.0"
+        },
+        "twine": {
+            "version": "==1.9.1"
+        },
+        "urllib3": {
+            "version": "==1.21.1"
+        },
+        "virtualenv": {
+            "version": "==15.1.0"
+        }
+    }
+}
