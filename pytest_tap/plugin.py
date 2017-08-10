@@ -20,7 +20,7 @@ tracker = Tracker()
 
 def pytest_addoption(parser):
     """Include all the command line options."""
-    group = parser.getgroup('terminal reporting', after='general')
+    group = parser.getgroup('terminal reporting', 'reporting', after='general')
     group.addoption(
         '--tap-stream', default=False, action='store_true', help=_(
             'Stream TAP output instead of the default test runner output.'))
@@ -42,7 +42,8 @@ def pytest_configure(config):
     tracker.combined = config.option.tap_combined
     if config.option.tap_stream:
         reporter = config.pluginmanager.getplugin('terminalreporter')
-        config.pluginmanager.unregister(reporter)
+        if reporter:
+            config.pluginmanager.unregister(reporter)
         tracker.streaming = True
         tracker.stream = sys.stdout
         # A common pytest pattern is to use test functions without classes.
