@@ -1,6 +1,11 @@
 Releases
 ========
 
+Version 2.1, August 12, 2017
+----------------------------
+
+* Fix crash when running with pytest-xdist (#27).
+
 Version 2.0, August 1, 2016
 ---------------------------
 
