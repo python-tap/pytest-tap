@@ -1,6 +1,11 @@
 Releases
 ========
 
+Version 2.2, In Development
+---------------------------
+
+* Drop support for Python 3.3 (it is end-of-life).
+
 Version 2.1, August 12, 2017
 ----------------------------
 
