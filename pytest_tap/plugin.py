@@ -60,7 +60,7 @@ def pytest_runtest_logreport(report):
         report.when == 'call'
     ):
         return
-    description = str(report.location[2])
+    description = str(report.location[0]) + "::" + str(report.location[2])
     testcase = report.location[0]
     if report.outcome == 'passed':
         tracker.add_ok(testcase, description)

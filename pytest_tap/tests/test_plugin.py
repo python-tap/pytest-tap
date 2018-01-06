@@ -72,7 +72,7 @@ class TestPlugin(unittest.TestCase):
         report = mock.Mock(when='call', outcome='passed', location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'test_file.py', 'TestFake.test_me')
+                'test_file.py', 'test_file.py::TestFake.test_me')
 
     def test_tracks_not_ok(self):
         plugin.tracker = mock.Mock()
@@ -80,7 +80,7 @@ class TestPlugin(unittest.TestCase):
         report = mock.Mock(when='call', outcome='failed', location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_not_ok.assert_called_once_with(
-            'test_file.py', 'TestFake.test_me', diagnostics='')
+            'test_file.py', 'test_file.py::TestFake.test_me', diagnostics='')
 
     def test_tracks_skip(self):
         plugin.tracker = mock.Mock()
@@ -91,7 +91,7 @@ class TestPlugin(unittest.TestCase):
             longrepr=longrepr)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
-            'test_file.py', 'TestFake.test_me', 'a reason')
+            'test_file.py', 'test_file.py::TestFake.test_me', 'a reason')
 
     def test_tracks_xfail(self):
         plugin.tracker = mock.Mock()
@@ -100,7 +100,7 @@ class TestPlugin(unittest.TestCase):
             when='call', outcome='skipped', location=location, wasxfail='')
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
-            'test_file.py', 'TestFake.test_me', '')
+            'test_file.py', 'test_file.py::TestFake.test_me', '')
 
     def test_generates_reports_for_stream(self):
         config = self._make_config()
@@ -135,4 +135,4 @@ class TestPlugin(unittest.TestCase):
         report = mock.Mock(when='call', outcome='passed', location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-                'tests/test_file.py', 'TestFake.test_me')
+                'tests/test_file.py', 'tests/test_file.py::TestFake.test_me')
