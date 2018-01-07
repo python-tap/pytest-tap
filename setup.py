@@ -16,6 +16,7 @@ import pytest_tap
 
 
 class ReleaseCommand(Command):
+    description = 'generate distribution release artifacts'
     user_options = []
 
     def initialize_options(self):
