@@ -1,5 +1,3 @@
-# Copyright (c) 2017, Matt Layman
-
 try:
     from unittest import mock
 except ImportError:
@@ -80,7 +78,8 @@ class TestPlugin(unittest.TestCase):
         report = mock.Mock(when='call', outcome='failed', location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_not_ok.assert_called_once_with(
-                'test_file.py', 'test_file.py::TestFake.test_me', diagnostics='')
+            'test_file.py', 'test_file.py::TestFake.test_me',
+            diagnostics='')
 
     def test_tracks_skip(self):
         plugin.tracker = mock.Mock()
