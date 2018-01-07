@@ -24,18 +24,18 @@ def pytest_addoption(parser):
     group.addoption(
             '--tap-stream', default=False, action='store_true', help=_(
                 'Stream TAP output instead of the default test runner output.'))
-            group.addoption(
-                    '--tap-files', default=False, action='store_true', help=_(
-                        'Store all TAP test results into individual files per test case.'))
-                    group.addoption(
-                            '--tap-combined', default=False, action='store_true', help=_(
-                                'Store all TAP test results into a combined output file.'))
-                            group.addoption('--tap-outdir', metavar='path', help=_(
-                                'An optional output directory to write TAP files to. '
-                                'If the directory does not exist, it will be created.'))
+    group.addoption(
+            '--tap-files', default=False, action='store_true', help=_(
+                'Store all TAP test results into individual files per test case.'))
+    group.addoption(
+            '--tap-combined', default=False, action='store_true', help=_(
+                'Store all TAP test results into a combined output file.'))
+    group.addoption('--tap-outdir', metavar='path', help=_(
+                    'An optional output directory to write TAP files to. '
+                    'If the directory does not exist, it will be created.'))
 
 
-                            @pytest.mark.trylast
+@pytest.mark.trylast
 def pytest_configure(config):
     """Set all the options before the test run."""
     tracker.outdir = config.option.tap_outdir
