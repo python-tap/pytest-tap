@@ -10,31 +10,35 @@ Developer documentation is on
 """
 
 from setuptools import find_packages, setup
-from setuptools.command.build_py import build_py
-from setuptools.command.sdist import sdist
-import sys
+from setuptools import Command
 
 import pytest_tap
 
 
-class BuildPy(build_py):
-    """Custom ``build_py`` command to always build mo files for wheels."""
+class ReleaseCommand(Command):
+    user_options = []
+
+    def initialize_options(self):
+        """Initialize options.
+
+        This method overrides a required abstract method.
+        """
+
+    def finalize_options(self):
+        """Finalize options.
+
+        This method overrides a required abstract method.
+        """
 
     def run(self):
-        # Babel fails hard on Python 3. Let Python 2 make the mo files.
-        if sys.version_info < (3, 0, 0):
-            self.run_command('compile_catalog')
-        # build_py is an old style class so super cannot be used.
-        build_py.run(self)
+        """Generate the distribution release artifacts.
 
-
-class Sdist(sdist):
-    """Custom ``sdist`` command to ensure that mo files are always created."""
-
-    def run(self):
+        The custom command is used to ensure that compiling
+        po to mo is not skipped.
+        """
         self.run_command('compile_catalog')
-        # sdist is an old style class so super cannot be used.
-        sdist.run(self)
+        self.run_command('sdist')
+        self.run_command('bdist_wheel')
 
 
 if __name__ == '__main__':
@@ -82,7 +86,6 @@ if __name__ == '__main__':
             'pytest',
         ],
         cmdclass={
-            'build_py': BuildPy,
-            'sdist': Sdist,
+            'release': ReleaseCommand,
         }
     )
