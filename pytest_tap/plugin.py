@@ -23,13 +23,10 @@ def pytest_addoption(parser):
     group = parser.getgroup('terminal reporting', 'reporting', after='general')
     group.addoption(
         '--tap-stream', default=False, action='store_true', help=_(
-            'Stream TAP output instead of the default test runner output.')
-        )
+            'Stream TAP output instead of the default test runner output.'))
     group.addoption(
         '--tap-files', default=False, action='store_true', help=_(
-            ('Store all TAP test results into individual files per test' +
-                'case.'))
-        )
+            'Store all TAP test results into individual files per test case.'))
     group.addoption(
         '--tap-combined', default=False, action='store_true', help=_(
             'Store all TAP test results into a combined output file.'))
@@ -59,9 +56,9 @@ def pytest_configure(config):
 def pytest_runtest_logreport(report):
     """Add a test result to the tracker."""
     if not (
-            (report.when == 'setup' and report.outcome == 'skipped') or
-            report.when == 'call'
-            ):
+        (report.when == 'setup' and report.outcome == 'skipped') or
+        report.when == 'call'
+    ):
         return
     description = str(report.location[0]) + '::' + str(report.location[2])
     testcase = report.location[0]
