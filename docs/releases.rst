@@ -1,9 +1,10 @@
 Releases
 ========
 
-Version 2.2, In Development
----------------------------
+Version 2.2, January 9, 2018
+----------------------------
 
+* Update output format to match closer to pytest styling.
 * Drop support for Python 3.3 (it is end-of-life).
 
 Version 2.1, August 12, 2017
