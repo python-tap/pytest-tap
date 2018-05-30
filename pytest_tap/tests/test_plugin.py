@@ -69,19 +69,19 @@ class TestPlugin(unittest.TestCase):
     def test_tracks_ok(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='passed', location=location)
+        report = mock.Mock(when='call', outcome='passed', location=location, tap_yaml_block='Example YAML')
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me')
+            'test_file.py', 'test_file.py::TestFake.test_me', directive='Example YAML')
 
     def test_tracks_not_ok(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='failed', location=location)
+        report = mock.Mock(when='call', outcome='failed', location=location, tap_yaml_block='Example YAML')
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_not_ok.assert_called_once_with(
             'test_file.py', 'test_file.py::TestFake.test_me',
-            diagnostics='')
+            diagnostics='', directive='Example YAML')
 
     def test_tracks_skip(self):
         plugin.tracker = mock.Mock()
@@ -133,7 +133,7 @@ class TestPlugin(unittest.TestCase):
     def test_path_pytest(self):
         plugin.tracker = mock.Mock()
         location = ('tests/test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='passed', location=location)
+        report = mock.Mock(when='call', outcome='passed', location=location, tap_yaml_block='Example YAML')
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me')
+            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me', directive='Example YAML')
