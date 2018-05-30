@@ -116,27 +116,10 @@ def _get_yaml_as_text(pytest_mark):
     testids_mark_arg_no = len(pytest_mark.args)
     if testids_mark_arg_no > 1:
         raise TypeError(
-            'Incorrect number of arguments passed to @pytest.mark.TESTIDS expected 1 and received {}'.format(
+            'Incorrect number of arguments passed to @pytest.mark.TESTIDS, expected 1 and received {}'.format(
                 testids_mark_arg_no))
     else:
         yaml_object = yaml.load(pytest_mark.args[0])
         yaml_text_block = '\n---\n' + yaml.dump(yaml_object, default_flow_style=False) + '...'
         indented_yaml_text_block = '\n   '.join(yaml_text_block.split('\n'))
         return indented_yaml_text_block
-
-
-# def tap_yaml(tap_yaml_text):
-#     """Parse a YAML string decorator to a text block and add to test outcome"""
-#     def tap_yaml_decorator(test_method):
-#         def wrapper(self, arg2):
-#             test_method(self, arg2)
-#             tap_yaml_block = _create_yaml_text_block(tap_yaml_text)
-#             self._outcome.result.tap_yaml_block = tap_yaml_block
-#         return wrapper
-#     return tap_yaml_decorator
-
-# def _create_yaml_text_block(tap_yaml_text):
-#     yaml_object = yaml.load(tap_yaml_text)
-#     yaml_text_block = '\n---\n' + yaml.dump(yaml_object, default_flow_style=False) + '...'
-#     indented_yaml_text_block = '\n   '.join(yaml_text_block.split('\n'))
-#     return indented_yaml_text_block
