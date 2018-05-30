@@ -13,6 +13,8 @@ from tap.tracker import Tracker
 
 from pytest_tap.i18n import _
 
+import yaml
+
 # Because of how pytest hooks work, there is not much choice
 # except to use module level state. Ugh.
 tracker = Tracker()
@@ -53,6 +55,14 @@ def pytest_configure(config):
         tracker.header = False
 
 
+@pytest.mark.hookwrapper
+def pytest_runtest_makereport(item, call):
+    report = yield  # get makereport outcome
+    yaml_text_block = _get_yaml_from_pytest_mark(item)
+    if call.when == 'call':
+        report.result.tap_yaml_block = yaml_text_block
+
+
 def pytest_runtest_logreport(report):
     """Add a test result to the tracker."""
     if not (
@@ -63,10 +73,10 @@ def pytest_runtest_logreport(report):
     description = str(report.location[0]) + '::' + str(report.location[2])
     testcase = report.location[0]
     if report.outcome == 'passed':
-        tracker.add_ok(testcase, description)
+        tracker.add_ok(testcase, description, directive=report.tap_yaml_block)
     elif report.outcome == 'failed':
         diagnostics = _make_as_diagnostics(report)
-        tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
+        tracker.add_not_ok(testcase, description, diagnostics=diagnostics, directive=report.tap_yaml_block)
     elif report.outcome == 'skipped':
         if type(report.longrepr) is tuple:
             reason = report.longrepr[2].split(':', 1)[1].strip()
@@ -92,3 +102,41 @@ def pytest_unconfigure(config):
         config.option.tap_combined
     ):
         tracker.generate_tap_reports()
+
+
+def _get_yaml_from_pytest_mark(item):
+    testids_mark = item.get_closest_marker('TESTIDS')
+    if testids_mark is None:
+        return ''
+    else:
+        return _get_yaml_as_text(testids_mark)
+
+
+def _get_yaml_as_text(pytest_mark):
+    testids_mark_arg_no = len(pytest_mark.args)
+    if testids_mark_arg_no > 1:
+        raise TypeError(
+            'Incorrect number of arguments passed to @pytest.mark.TESTIDS expected 1 and received {}'.format(
+                testids_mark_arg_no))
+    else:
+        yaml_object = yaml.load(pytest_mark.args[0])
+        yaml_text_block = '\n---\n' + yaml.dump(yaml_object, default_flow_style=False) + '...'
+        indented_yaml_text_block = '\n   '.join(yaml_text_block.split('\n'))
+        return indented_yaml_text_block
+
+
+# def tap_yaml(tap_yaml_text):
+#     """Parse a YAML string decorator to a text block and add to test outcome"""
+#     def tap_yaml_decorator(test_method):
+#         def wrapper(self, arg2):
+#             test_method(self, arg2)
+#             tap_yaml_block = _create_yaml_text_block(tap_yaml_text)
+#             self._outcome.result.tap_yaml_block = tap_yaml_block
+#         return wrapper
+#     return tap_yaml_decorator
+
+# def _create_yaml_text_block(tap_yaml_text):
+#     yaml_object = yaml.load(tap_yaml_text)
+#     yaml_text_block = '\n---\n' + yaml.dump(yaml_object, default_flow_style=False) + '...'
+#     indented_yaml_text_block = '\n   '.join(yaml_text_block.split('\n'))
+#     return indented_yaml_text_block
