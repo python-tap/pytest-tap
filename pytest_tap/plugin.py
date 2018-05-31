@@ -106,6 +106,7 @@ def pytest_unconfigure(config):
 
 
 def _get_yaml_as_string_from_mark(marker):
+    """Gets yaml and converts to text"""
     testids_mark_arg_no = len(marker.args)
     if testids_mark_arg_no > 1:
         raise TypeError(
@@ -122,6 +123,7 @@ def _get_yaml_as_string_from_mark(marker):
 
 
 def _get_yaml_from_user_properties(user_properties):
+    """Gets yaml text from test report user properties"""
     test_yaml = ''
     for i, e in enumerate(user_properties):
         if e[0] == 'test_yaml':
