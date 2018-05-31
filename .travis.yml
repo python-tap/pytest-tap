@@ -21,7 +21,8 @@ matrix:
       language: generic
       env: TOX_ENV=py27
       before_install:
-        - brew install python3
+        - brew update
+        - brew upgrade python
         - python3 -m venv venv
         - source venv/bin/activate
     - os: linux
