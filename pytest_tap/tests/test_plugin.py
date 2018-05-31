@@ -70,16 +70,19 @@ class TestPlugin(unittest.TestCase):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
         user_properties = [('test_yaml', 'An example YAML string')]
-        report = mock.Mock(when='call', outcome='passed', location=location, user_properties=user_properties)
+        report = mock.Mock(when='call', outcome='passed', location=location,
+                           user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me', directive='An example YAML string')
+            'test_file.py', 'test_file.py::TestFake.test_me',
+            directive='An example YAML string')
 
     def test_tracks_not_ok(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
         user_properties = [('test_yaml', 'An example YAML string')]
-        report = mock.Mock(when='call', outcome='failed', location=location, user_properties=user_properties)
+        report = mock.Mock(when='call', outcome='failed', location=location,
+                           user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_not_ok.assert_called_once_with(
             'test_file.py', 'test_file.py::TestFake.test_me',
@@ -102,8 +105,8 @@ class TestPlugin(unittest.TestCase):
         location = ('test_file.py', 1, 'TestFake.test_me')
         user_properties = [('test_yaml', 'An example YAML string')]
         report = mock.Mock(
-            when='call', outcome='skipped', location=location, wasxfail=''
-            , user_properties=user_properties)
+            when='call', outcome='skipped', location=location, wasxfail='',
+            user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
             'test_file.py', 'test_file.py::TestFake.test_me', '')
@@ -139,7 +142,9 @@ class TestPlugin(unittest.TestCase):
         plugin.tracker = mock.Mock()
         location = ('tests/test_file.py', 1, 'TestFake.test_me')
         user_properties = [('test_yaml', 'An example YAML string')]
-        report = mock.Mock(when='call', outcome='passed', location=location, user_properties=user_properties)
+        report = mock.Mock(when='call', outcome='passed', location=location,
+                           user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me', directive='An example YAML string')
+            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me',
+            directive='An example YAML string')
