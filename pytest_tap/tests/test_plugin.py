@@ -69,27 +69,33 @@ class TestPlugin(unittest.TestCase):
     def test_tracks_ok(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='passed', location=location)
+        user_properties = [('test_yaml', 'An example YAML string')]
+        report = mock.Mock(when='call', outcome='passed', location=location,
+                           user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me')
+            'test_file.py', 'test_file.py::TestFake.test_me',
+            directive='An example YAML string')
 
     def test_tracks_not_ok(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='failed', location=location)
+        user_properties = [('test_yaml', 'An example YAML string')]
+        report = mock.Mock(when='call', outcome='failed', location=location,
+                           user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_not_ok.assert_called_once_with(
             'test_file.py', 'test_file.py::TestFake.test_me',
-            diagnostics='')
+            diagnostics='', directive='An example YAML string')
 
     def test_tracks_skip(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
         longrepr = ('', '', 'Skipped: a reason')
+        user_properties = [('test_yaml', 'An example YAML string')]
         report = mock.Mock(
             when='setup', outcome='skipped', location=location,
-            longrepr=longrepr)
+            longrepr=longrepr, user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
             'test_file.py', 'test_file.py::TestFake.test_me', 'a reason')
@@ -97,8 +103,10 @@ class TestPlugin(unittest.TestCase):
     def test_tracks_xfail(self):
         plugin.tracker = mock.Mock()
         location = ('test_file.py', 1, 'TestFake.test_me')
+        user_properties = [('test_yaml', 'An example YAML string')]
         report = mock.Mock(
-            when='call', outcome='skipped', location=location, wasxfail='')
+            when='call', outcome='skipped', location=location, wasxfail='',
+            user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
             'test_file.py', 'test_file.py::TestFake.test_me', '')
@@ -133,7 +141,10 @@ class TestPlugin(unittest.TestCase):
     def test_path_pytest(self):
         plugin.tracker = mock.Mock()
         location = ('tests/test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='passed', location=location)
+        user_properties = [('test_yaml', 'An example YAML string')]
+        report = mock.Mock(when='call', outcome='passed', location=location,
+                           user_properties=user_properties)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me')
+            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me',
+            directive='An example YAML string')
