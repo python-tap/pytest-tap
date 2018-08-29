@@ -61,8 +61,8 @@ def pytest_configure(config):
     )
 
     tracker.outdir = config.getoption("tap_outdir")
-    tracker.combined = config.option.tap_combined
-    if config.option.tap_stream:
+    tracker.combined = config.getoption("tap_combined")
+    if config.getoption("tap_stream"):
         reporter = config.pluginmanager.getplugin("terminalreporter")
         if reporter:
             config.pluginmanager.unregister(reporter)
