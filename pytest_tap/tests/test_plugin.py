@@ -30,9 +30,13 @@ def test_includes_options(testdir):
     """All options are present in the help."""
     result = testdir.runpytest("--help")
 
-    result.stdout.fnmatch_lines(
-        ["*--tap-stream*", "*--tap-files*", "*--tap-combined*", "*--tap-outdir=path*"]
-    )
+    expected_option_flags = [
+        "*--tap-stream*",
+        "*--tap-files*",
+        "*--tap-combined*",
+        "*--tap-outdir=path*",
+    ]
+    result.stdout.fnmatch_lines(expected_option_flags)
 
 
 def test_stream(testdir, sample_test_file):
