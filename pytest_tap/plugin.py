@@ -16,6 +16,7 @@ from pytest_tap.i18n import _
 # Because of how pytest hooks work, there is not much choice
 # except to use module level state. Ugh.
 tracker = Tracker()
+ENABLED = False
 
 
 def pytest_addoption(parser):
@@ -52,9 +53,16 @@ def pytest_addoption(parser):
 @pytest.mark.trylast
 def pytest_configure(config):
     """Set all the options before the test run."""
-    tracker.outdir = config.option.tap_outdir
-    tracker.combined = config.option.tap_combined
-    if config.option.tap_stream:
+    global ENABLED
+    ENABLED = (
+        config.getoption("tap_stream")
+        or config.getoption("tap_combined")
+        or config.getoption("tap_files")
+    )
+
+    tracker.outdir = config.getoption("tap_outdir")
+    tracker.combined = config.getoption("tap_combined")
+    if config.getoption("tap_stream"):
         reporter = config.pluginmanager.getplugin("terminalreporter")
         if reporter:
             config.pluginmanager.unregister(reporter)
@@ -69,6 +77,9 @@ def pytest_configure(config):
 
 def pytest_runtest_logreport(report):
     """Add a test result to the tracker."""
+    if not ENABLED:
+        return
+
     if not (
         (report.when == "setup" and report.outcome == "skipped")
         or report.when == "call"
@@ -100,9 +111,5 @@ def _make_as_diagnostics(report):
 
 def pytest_unconfigure(config):
     """Dump the results."""
-    if (
-        config.option.tap_stream
-        or config.option.tap_files
-        or config.option.tap_combined
-    ):
+    if ENABLED:
         tracker.generate_tap_reports()

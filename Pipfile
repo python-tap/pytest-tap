@@ -11,6 +11,7 @@ tox = "*"
 twine = "*"
 black = "*"
 pre-commit = "*"
+"e1839a8" = {editable = true, path = "."}
 
 [packages]
 pytest = "*"
