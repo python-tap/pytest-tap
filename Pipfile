@@ -9,6 +9,8 @@ mock = "*"
 requests = "*"
 tox = "*"
 twine = "*"
+black = "*"
+pre-commit = "*"
 
 [packages]
 pytest = "*"

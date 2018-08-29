@@ -16,7 +16,7 @@ import pytest_tap
 
 
 class ReleaseCommand(Command):
-    description = 'generate distribution release artifacts'
+    description = "generate distribution release artifacts"
     user_options = []
 
     def initialize_options(self):
@@ -37,56 +37,45 @@ class ReleaseCommand(Command):
         The custom command is used to ensure that compiling
         po to mo is not skipped.
         """
-        self.run_command('compile_catalog')
-        self.run_command('sdist')
-        self.run_command('bdist_wheel')
+        self.run_command("compile_catalog")
+        self.run_command("sdist")
+        self.run_command("bdist_wheel")
 
 
-if __name__ == '__main__':
-    with open('docs/releases.rst', 'r') as f:
+if __name__ == "__main__":
+    with open("docs/releases.rst", "r") as f:
         releases = f.read()
 
-    long_description = __doc__ + '\n\n' + releases
+    long_description = __doc__ + "\n\n" + releases
 
     setup(
-        name='pytest-tap',
+        name="pytest-tap",
         version=pytest_tap.__version__,
-        url='https://github.com/python-tap/pytest-tap',
-        license='BSD',
-        author='Matt Layman',
-        author_email='matthewlayman@gmail.com',
-        description='Test Anything Protocol (TAP) reporting plugin for pytest',
+        url="https://github.com/python-tap/pytest-tap",
+        license="BSD",
+        author="Matt Layman",
+        author_email="matthewlayman@gmail.com",
+        description="Test Anything Protocol (TAP) reporting plugin for pytest",
         long_description=long_description,
         packages=find_packages(),
-        entry_points={
-            'pytest11': ['tap = pytest_tap.plugin'],
-        },
+        entry_points={"pytest11": ["tap = pytest_tap.plugin"]},
         include_package_data=True,
         zip_safe=False,
-        platforms='any',
-        install_requires=[
-            'pytest',
-            'tap.py',
-        ],
+        platforms="any",
+        install_requires=["pytest", "tap.py"],
         classifiers=[
-            'Development Status :: 5 - Production/Stable',
-            'Framework :: Pytest',
-            'Intended Audience :: Developers',
-            'License :: OSI Approved :: BSD License',
-            'Operating System :: OS Independent',
-            'Programming Language :: Python :: 2.7',
-            'Programming Language :: Python :: 3.4',
-            'Programming Language :: Python :: 3.5',
-            'Programming Language :: Python :: 3.6',
-            'Programming Language :: Python :: Implementation :: PyPy',
-            'Topic :: Software Development :: Testing',
+            "Development Status :: 5 - Production/Stable",
+            "Framework :: Pytest",
+            "Intended Audience :: Developers",
+            "License :: OSI Approved :: BSD License",
+            "Operating System :: OS Independent",
+            "Programming Language :: Python :: 2.7",
+            "Programming Language :: Python :: 3.4",
+            "Programming Language :: Python :: 3.5",
+            "Programming Language :: Python :: 3.6",
+            "Programming Language :: Python :: Implementation :: PyPy",
+            "Topic :: Software Development :: Testing",
         ],
-        keywords=[
-            'TAP',
-            'unittest',
-            'pytest',
-        ],
-        cmdclass={
-            'release': ReleaseCommand,
-        }
+        keywords=["TAP", "unittest", "pytest"],
+        cmdclass={"release": ReleaseCommand},
     )

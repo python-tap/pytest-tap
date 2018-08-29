@@ -20,19 +20,33 @@ tracker = Tracker()
 
 def pytest_addoption(parser):
     """Include all the command line options."""
-    group = parser.getgroup('terminal reporting', 'reporting', after='general')
+    group = parser.getgroup("terminal reporting", "reporting", after="general")
     group.addoption(
-        '--tap-stream', default=False, action='store_true', help=_(
-            'Stream TAP output instead of the default test runner output.'))
+        "--tap-stream",
+        default=False,
+        action="store_true",
+        help=_("Stream TAP output instead of the default test runner output."),
+    )
     group.addoption(
-        '--tap-files', default=False, action='store_true', help=_(
-            'Store all TAP test results into individual files per test case.'))
+        "--tap-files",
+        default=False,
+        action="store_true",
+        help=_("Store all TAP test results into individual files per test case."),
+    )
     group.addoption(
-        '--tap-combined', default=False, action='store_true', help=_(
-            'Store all TAP test results into a combined output file.'))
-    group.addoption('--tap-outdir', metavar='path', help=_(
-        'An optional output directory to write TAP files to. '
-        'If the directory does not exist, it will be created.'))
+        "--tap-combined",
+        default=False,
+        action="store_true",
+        help=_("Store all TAP test results into a combined output file."),
+    )
+    group.addoption(
+        "--tap-outdir",
+        metavar="path",
+        help=_(
+            "An optional output directory to write TAP files to. "
+            "If the directory does not exist, it will be created."
+        ),
+    )
 
 
 @pytest.mark.trylast
@@ -41,7 +55,7 @@ def pytest_configure(config):
     tracker.outdir = config.option.tap_outdir
     tracker.combined = config.option.tap_combined
     if config.option.tap_stream:
-        reporter = config.pluginmanager.getplugin('terminalreporter')
+        reporter = config.pluginmanager.getplugin("terminalreporter")
         if reporter:
             config.pluginmanager.unregister(reporter)
         tracker.streaming = True
@@ -56,20 +70,20 @@ def pytest_configure(config):
 def pytest_runtest_logreport(report):
     """Add a test result to the tracker."""
     if not (
-        (report.when == 'setup' and report.outcome == 'skipped') or
-        report.when == 'call'
+        (report.when == "setup" and report.outcome == "skipped")
+        or report.when == "call"
     ):
         return
-    description = str(report.location[0]) + '::' + str(report.location[2])
+    description = str(report.location[0]) + "::" + str(report.location[2])
     testcase = report.location[0]
-    if report.outcome == 'passed':
+    if report.outcome == "passed":
         tracker.add_ok(testcase, description)
-    elif report.outcome == 'failed':
+    elif report.outcome == "failed":
         diagnostics = _make_as_diagnostics(report)
         tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
-    elif report.outcome == 'skipped':
+    elif report.outcome == "skipped":
         if type(report.longrepr) is tuple:
-            reason = report.longrepr[2].split(':', 1)[1].strip()
+            reason = report.longrepr[2].split(":", 1)[1].strip()
         else:
             reason = report.wasxfail
         tracker.add_skip(testcase, description, reason)
@@ -87,8 +101,8 @@ def _make_as_diagnostics(report):
 def pytest_unconfigure(config):
     """Dump the results."""
     if (
-        config.option.tap_stream or
-        config.option.tap_files or
-        config.option.tap_combined
+        config.option.tap_stream
+        or config.option.tap_files
+        or config.option.tap_combined
     ):
         tracker.generate_tap_reports()

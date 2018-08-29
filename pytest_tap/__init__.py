@@ -1,3 +1,3 @@
 # Copyright (c) 2018, Matt Layman
 
-__version__ = '2.2'
+__version__ = "2.2"

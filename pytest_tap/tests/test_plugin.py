@@ -13,7 +13,6 @@ from pytest_tap import plugin
 
 
 class TestPlugin(unittest.TestCase):
-
     def setUp(self):
         """The pytest plugin uses module scope so a fresh tracker
         must be installed each time."""
@@ -62,46 +61,50 @@ class TestPlugin(unittest.TestCase):
     def test_track_when_call_report(self):
         """Only the call reports are tracked."""
         plugin.tracker = mock.Mock()
-        report = mock.Mock(when='setup', outcome='passed')
+        report = mock.Mock(when="setup", outcome="passed")
         plugin.pytest_runtest_logreport(report)
         self.assertFalse(plugin.tracker.add_ok.called)
 
     def test_tracks_ok(self):
         plugin.tracker = mock.Mock()
-        location = ('test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='passed', location=location)
+        location = ("test_file.py", 1, "TestFake.test_me")
+        report = mock.Mock(when="call", outcome="passed", location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me')
+            "test_file.py", "test_file.py::TestFake.test_me"
+        )
 
     def test_tracks_not_ok(self):
         plugin.tracker = mock.Mock()
-        location = ('test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='failed', location=location)
+        location = ("test_file.py", 1, "TestFake.test_me")
+        report = mock.Mock(when="call", outcome="failed", location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_not_ok.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me',
-            diagnostics='')
+            "test_file.py", "test_file.py::TestFake.test_me", diagnostics=""
+        )
 
     def test_tracks_skip(self):
         plugin.tracker = mock.Mock()
-        location = ('test_file.py', 1, 'TestFake.test_me')
-        longrepr = ('', '', 'Skipped: a reason')
+        location = ("test_file.py", 1, "TestFake.test_me")
+        longrepr = ("", "", "Skipped: a reason")
         report = mock.Mock(
-            when='setup', outcome='skipped', location=location,
-            longrepr=longrepr)
+            when="setup", outcome="skipped", location=location, longrepr=longrepr
+        )
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me', 'a reason')
+            "test_file.py", "test_file.py::TestFake.test_me", "a reason"
+        )
 
     def test_tracks_xfail(self):
         plugin.tracker = mock.Mock()
-        location = ('test_file.py', 1, 'TestFake.test_me')
+        location = ("test_file.py", 1, "TestFake.test_me")
         report = mock.Mock(
-            when='call', outcome='skipped', location=location, wasxfail='')
+            when="call", outcome="skipped", location=location, wasxfail=""
+        )
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_skip.assert_called_once_with(
-            'test_file.py', 'test_file.py::TestFake.test_me', '')
+            "test_file.py", "test_file.py::TestFake.test_me", ""
+        )
 
     def test_generates_reports_for_stream(self):
         config = self._make_config()
@@ -132,8 +135,9 @@ class TestPlugin(unittest.TestCase):
 
     def test_path_pytest(self):
         plugin.tracker = mock.Mock()
-        location = ('tests/test_file.py', 1, 'TestFake.test_me')
-        report = mock.Mock(when='call', outcome='passed', location=location)
+        location = ("tests/test_file.py", 1, "TestFake.test_me")
+        report = mock.Mock(when="call", outcome="passed", location=location)
         plugin.pytest_runtest_logreport(report)
         plugin.tracker.add_ok.assert_called_once_with(
-            'tests/test_file.py', 'tests/test_file.py::TestFake.test_me')
+            "tests/test_file.py", "tests/test_file.py::TestFake.test_me"
+        )
