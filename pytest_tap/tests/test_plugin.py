@@ -1,17 +1,6 @@
 # Copyright (c) 2018, Matt Layman
 
-# try:
-#     from unittest import mock
-# except ImportError:
-#     import mock
-# import tempfile
-# import unittest
-
 import pytest
-
-# from tap.tracker import Tracker
-
-# from pytest_tap import plugin
 
 
 @pytest.fixture
