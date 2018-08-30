@@ -85,18 +85,37 @@ def pytest_runtest_logreport(report):
         or report.when == "call"
     ):
         return
+
     description = str(report.location[0]) + "::" + str(report.location[2])
     testcase = report.location[0]
-    if report.outcome == "passed":
+
+    # Handle xfails first because they report in unusual ways.
+    # Non-strict xfails will include `wasxfail` while strict xfails won't.
+    if hasattr(report, "wasxfail"):
+        directive = ""
+        if report.skipped:
+            directive = "TODO expected failure: {}".format(report.wasxfail)
+        elif report.passed:
+            directive = "TODO unexpected success: {}".format(report.wasxfail)
+
+        tracker.add_ok(testcase, description, directive=directive)
+    elif report.passed:
         tracker.add_ok(testcase, description)
-    elif report.outcome == "failed":
+    elif report.failed:
         diagnostics = _make_as_diagnostics(report)
-        tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
-    elif report.outcome == "skipped":
-        if type(report.longrepr) is tuple:
-            reason = report.longrepr[2].split(":", 1)[1].strip()
-        else:
-            reason = report.wasxfail
+
+        # strict xfail mode should include the todo directive.
+        # The only indicator that strict xfail occurred for this report
+        # is to check longrepr.
+        directive = ""
+        if isinstance(report.longrepr, str) and "[XPASS(strict)]" in report.longrepr:
+            directive = "TODO"
+
+        tracker.add_not_ok(
+            testcase, description, directive=directive, diagnostics=diagnostics
+        )
+    elif report.skipped:
+        reason = report.longrepr[2].split(":", 1)[1].strip()
         tracker.add_skip(testcase, description, reason)
 
 

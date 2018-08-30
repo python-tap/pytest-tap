@@ -1,6 +1,13 @@
 Releases
 ========
 
+Version 2.3, In Development
+---------------------------
+
+* Improve xfail handling.
+  Honor strict xfail mode.
+  Use TODO instead of SKIP directive to better align with TAP specification.
+
 Version 2.2, January 9, 2018
 ----------------------------
 
