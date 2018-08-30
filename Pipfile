@@ -5,7 +5,6 @@ verify_ssl = true
 [dev-packages]
 babel = "*"
 flake8 = "*"
-mock = "*"
 requests = "*"
 tox = "*"
 twine = "*"
@@ -16,3 +15,4 @@ pre-commit = "*"
 [packages]
 pytest = "*"
 "tap.py" = "*"
+six = "*"

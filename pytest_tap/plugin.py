@@ -8,6 +8,7 @@ import sys
 
 from py.io import TerminalWriter
 import pytest
+import six
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
@@ -108,7 +109,10 @@ def pytest_runtest_logreport(report):
         # The only indicator that strict xfail occurred for this report
         # is to check longrepr.
         directive = ""
-        if isinstance(report.longrepr, str) and "[XPASS(strict)]" in report.longrepr:
+        if (
+            isinstance(report.longrepr, six.string_types)
+            and "[XPASS(strict)]" in report.longrepr
+        ):
             directive = "TODO"
 
         tracker.add_not_ok(
