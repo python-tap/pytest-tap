@@ -51,6 +51,13 @@ def pytest_addoption(parser):
     )
 
 
+def pytest_runtestloop(session):
+    """output the total tests first"""
+    if ENABLED:
+        if session.config.getoption("tap_stream"):
+            tracker.set_plan(session.testscollected)
+
+
 @pytest.mark.trylast
 def pytest_configure(config):
     """Set all the options before the test run."""
