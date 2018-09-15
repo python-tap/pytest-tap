@@ -15,6 +15,10 @@ def sample_test_file(testdir):
         def test_not_ok():
             assert False
 
+        @pytest.mark.parametrize('param', ("foo", "bar"))
+        def test_params(param):
+            assert True
+
         @pytest.mark.skip(reason='some reason')
         def test_skipped():
             assert False
@@ -45,11 +49,13 @@ def test_stream(testdir, sample_test_file):
 
     result.stdout.fnmatch_lines(
         [
+            "1..6",
             "ok 1 test_stream.py::test_ok",
             "not ok 2 test_stream.py::test_not_ok",
-            "ok 3 test_stream.py::test_skipped # SKIP some reason",
-            "ok 4 test_stream.py::test_broken # TODO expected failure: a reason",
-            "1..4",
+            "ok 3 test_stream.py::test_params[foo]",
+            "ok 4 test_stream.py::test_params[bar]",
+            "ok 5 test_stream.py::test_skipped # SKIP some reason",
+            "ok 6 test_stream.py::test_broken # TODO expected failure: a reason",
         ]
     )
 
