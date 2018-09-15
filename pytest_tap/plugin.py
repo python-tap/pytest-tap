@@ -51,13 +51,6 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_runtestloop(session):
-    """output the total tests first"""
-    if ENABLED:
-        if session.config.getoption("tap_stream"):
-            tracker.set_plan(session.testscollected)
-
-
 @pytest.mark.trylast
 def pytest_configure(config):
     """Set all the options before the test run."""
@@ -81,6 +74,14 @@ def pytest_configure(config):
         # out a lot of line noise since every function gets its own header.
         # Disable it automatically for streaming.
         tracker.header = False
+
+
+def pytest_runtestloop(session):
+    """Output the plan line first."""
+    if ENABLED:
+        if session.config.getoption("tap_stream") \
+           or session.config.getoption("tap_combined"):
+            tracker.set_plan(session.testscollected)
 
 
 def pytest_runtest_logreport(report):
