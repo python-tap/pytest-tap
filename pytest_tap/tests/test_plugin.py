@@ -67,9 +67,7 @@ def test_combined(testdir, sample_test_file):
     testresults = testdir.tmpdir.join("testresults.tap")
     assert testresults.check()
     actual_results = [
-        line.strip()
-        for line in testresults.readlines()
-        if not line.startswith('#')
+        line.strip() for line in testresults.readlines() if not line.startswith("#")
     ]
     expected_results = [
         "1..6",

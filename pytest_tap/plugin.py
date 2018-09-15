@@ -79,8 +79,9 @@ def pytest_configure(config):
 def pytest_runtestloop(session):
     """Output the plan line first."""
     if ENABLED:
-        if session.config.getoption("tap_stream") \
-           or session.config.getoption("tap_combined"):
+        if session.config.getoption("tap_stream") or session.config.getoption(
+            "tap_combined"
+        ):
             tracker.set_plan(session.testscollected)
 
 
