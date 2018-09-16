@@ -76,6 +76,15 @@ def pytest_configure(config):
         tracker.header = False
 
 
+def pytest_runtestloop(session):
+    """Output the plan line first."""
+    if ENABLED:
+        if session.config.getoption("tap_stream") or session.config.getoption(
+            "tap_combined"
+        ):
+            tracker.set_plan(session.testscollected)
+
+
 def pytest_runtest_logreport(report):
     """Add a test result to the tracker."""
     if not ENABLED:

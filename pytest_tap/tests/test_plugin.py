@@ -15,6 +15,10 @@ def sample_test_file(testdir):
         def test_not_ok():
             assert False
 
+        @pytest.mark.parametrize('param', ("foo", "bar"))
+        def test_params(param):
+            assert True
+
         @pytest.mark.skip(reason='some reason')
         def test_skipped():
             assert False
@@ -45,11 +49,13 @@ def test_stream(testdir, sample_test_file):
 
     result.stdout.fnmatch_lines(
         [
+            "1..6",
             "ok 1 test_stream.py::test_ok",
             "not ok 2 test_stream.py::test_not_ok",
-            "ok 3 test_stream.py::test_skipped # SKIP some reason",
-            "ok 4 test_stream.py::test_broken # TODO expected failure: a reason",
-            "1..4",
+            "ok 3 test_stream.py::test_params[foo]",
+            "ok 4 test_stream.py::test_params[bar]",
+            "ok 5 test_stream.py::test_skipped # SKIP some reason",
+            "ok 6 test_stream.py::test_broken # TODO expected failure: a reason",
         ]
     )
 
@@ -60,6 +66,19 @@ def test_combined(testdir, sample_test_file):
 
     testresults = testdir.tmpdir.join("testresults.tap")
     assert testresults.check()
+    actual_results = [
+        line.strip() for line in testresults.readlines() if not line.startswith("#")
+    ]
+    expected_results = [
+        "1..6",
+        "ok 1 test_combined.py::test_ok",
+        "not ok 2 test_combined.py::test_not_ok",
+        "ok 3 test_combined.py::test_params[foo]",
+        "ok 4 test_combined.py::test_params[bar]",
+        "ok 5 test_combined.py::test_skipped # SKIP some reason",
+        "ok 6 test_combined.py::test_broken # TODO expected failure: a reason",
+    ]
+    assert actual_results == expected_results
 
 
 def test_files(testdir, sample_test_file):
