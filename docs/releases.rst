@@ -1,13 +1,13 @@
 Releases
 ========
 
-Version 2.3, In Development
----------------------------
+Version 2.3, September 16, 2018
+-------------------------------
 
 * Improve xfail handling.
   Honor strict xfail mode.
   Use TODO instead of SKIP directive to better align with TAP specification.
-* Output the "plan" line (``1..N``) first.
+* Output the plan line (``1..N``) first.
 
 Version 2.2, January 9, 2018
 ----------------------------
