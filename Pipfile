@@ -14,5 +14,8 @@ pre-commit = "*"
 
 [packages]
 pytest = "*"
-"tap.py" = "*"
+"tap.py" = ">=2.5"
 six = "*"
+
+[pipenv]
+allow_prereleases = true

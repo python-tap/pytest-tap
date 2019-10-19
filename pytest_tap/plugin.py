@@ -92,6 +92,7 @@ def pytest_runtest_logreport(report):
 
     if not (
         (report.when == "setup" and report.outcome == "skipped")
+        or (report.when == "setup" and report.outcome == "failed")
         or report.when == "call"
     ):
         return
