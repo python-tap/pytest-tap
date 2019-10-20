@@ -4,4 +4,4 @@ include README.rst
 include Pipfile
 include Pipfile.lock
 include docs/releases.rst
-recursive-include pytest_tap/locale *
+recursive-include src/pytest_tap/locale *
