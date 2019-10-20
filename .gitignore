@@ -67,3 +67,6 @@ target/
 
 # TAP
 *.tap
+
+# Virtual environments
+venv/

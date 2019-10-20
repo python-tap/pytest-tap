@@ -1,7 +1,5 @@
 include AUTHORS
 include LICENSE
 include README.rst
-include Pipfile
-include Pipfile.lock
 include docs/releases.rst
 recursive-include src/pytest_tap/locale *

@@ -47,6 +47,7 @@ This is an example usage from the plugin's test suite.
 .. code-block:: console
 
    $ pytest --tap-stream
+   1..12
    ok 1 - TestPlugin.test_generates_reports_for_combined
    ok 2 - TestPlugin.test_generates_reports_for_files
    ok 3 - TestPlugin.test_generates_reports_for_stream
@@ -59,7 +60,6 @@ This is an example usage from the plugin's test suite.
    ok 10 - TestPlugin.test_tracks_not_ok
    ok 11 - TestPlugin.test_tracks_ok
    ok 12 - TestPlugin.test_tracks_skip
-   1..12
 
 Contributing
 ------------
