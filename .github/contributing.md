@@ -4,19 +4,18 @@ File an issue in GitHub
 and we can discuss your bug/feature/idea.
 If you are ready to start coding...
 
-pytest-tap uses Pipenv
+pytest-tap uses the `venv` module
+and a requirements file
 to manage development.
-The following instructions assume that Pipenv is installed.
-See the [Pipenv install instructions](https://docs.pipenv.org/install/>)
-for more details.
 
 After installing Pipenv:
 
 ```bash
 $ git clone git@github.com:python-tap/pytest-tap.git
 $ cd pytest-tap
-$ pipenv install --dev --ignore-pipfile
-$ pipenv shell
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements-dev.txt
 $ # Edit some files and run the tests.
 $ pytest
 ```

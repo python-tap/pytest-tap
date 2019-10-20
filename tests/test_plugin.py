@@ -2,6 +2,8 @@
 
 import pytest
 
+from tap.tracker import ENABLE_VERSION_13
+
 
 @pytest.fixture
 def sample_test_file(testdir):
@@ -78,6 +80,9 @@ def test_combined(testdir, sample_test_file):
         "ok 5 test_combined.py::test_skipped # SKIP some reason",
         "ok 6 test_combined.py::test_broken # TODO expected failure: a reason",
     ]
+    # If the dependencies for version 13 happen to be installed, tweak the output.
+    if ENABLE_VERSION_13:
+        expected_results.insert(0, "TAP version 13")
     assert actual_results == expected_results
 
 
