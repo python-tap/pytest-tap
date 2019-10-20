@@ -15,6 +15,7 @@ $ git clone git@github.com:python-tap/pytest-tap.git
 $ cd pytest-tap
 $ python3 -m venv venv
 $ source venv/bin/activate
+$ pip install -r requirements-dev.txt
 $ # Edit some files and run the tests.
 $ pytest
 ```
