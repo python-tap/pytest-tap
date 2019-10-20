@@ -12,8 +12,6 @@ Developer documentation is on
 from setuptools import find_packages, setup
 from setuptools import Command
 
-import pytest_tap
-
 
 class ReleaseCommand(Command):
     description = "generate distribution release artifacts"
@@ -50,14 +48,15 @@ if __name__ == "__main__":
 
     setup(
         name="pytest-tap",
-        version=pytest_tap.__version__,
+        version="2.3",
         url="https://github.com/python-tap/pytest-tap",
         license="BSD",
         author="Matt Layman",
         author_email="matthewlayman@gmail.com",
         description="Test Anything Protocol (TAP) reporting plugin for pytest",
         long_description=long_description,
-        packages=find_packages(),
+        packages=find_packages(where="src"),
+        package_dir={"": "src"},
         entry_points={"pytest11": ["tap = pytest_tap.plugin"]},
         include_package_data=True,
         zip_safe=False,
