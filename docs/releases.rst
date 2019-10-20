@@ -6,6 +6,8 @@ Version 2.4, To Be Released
 
 * Handle failures that occur from setup.
   This will catch errors that may happen in fixtures.
+* Drop support for Python 3.4 (it is end-of-life).
+* Add support for Python 3.7.
 
 Version 2.3, September 16, 2018
 -------------------------------
