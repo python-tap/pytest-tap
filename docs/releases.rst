@@ -1,6 +1,12 @@
 Releases
 ========
 
+Version 2.4, To Be Released
+---------------------------
+
+* Handle failures that occur from setup.
+  This will catch errors that may happen in fixtures.
+
 Version 2.3, September 16, 2018
 -------------------------------
 
