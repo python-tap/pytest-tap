@@ -64,30 +64,6 @@ This is an example usage from the plugin's test suite.
 Contributing
 ------------
 
-First,
-come talk!
-File an issue in GitHub
-and we can discuss your bug/feature/idea.
-If you are ready to start coding...
-
-pytest-tap uses Pipenv
-to manage development.
-The following instructions assume that Pipenv is installed.
-See the `Pipenv install instructions <https://docs.pipenv.org/install/>`_
-for more details.
-
-After installing Pipenv:
-
-.. code-block:: console
-
-   $ git clone git@github.com:python-tap/pytest-tap.git
-   $ cd pytest-tap
-   $ pipenv install --dev --ignore-pipfile
-   $ pipenv shell
-   $ # Edit some files and run the tests.
-   $ pytest
-
-Once your feature or bug fix is ready,
-`submit a Pull Request <https://help.github.com/articles/creating-a-pull-request/>`_.
-
-...profit! :moneybag:
+The project welcomes contributions of all kinds.
+Check out the `contributing guidelines <https://github.com/python-tap/pytest-tap/blob/master/.github/contributing.md>`_
+for tips on how to get started.
