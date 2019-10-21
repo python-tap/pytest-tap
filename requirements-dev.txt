@@ -1,4 +1,5 @@
 babel
+bump2version
 flake8
 requests
 tox
