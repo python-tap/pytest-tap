@@ -18,13 +18,9 @@ matrix:
       python: pypy
       env: TOX_ENV=pypy
     - os: osx
+      osx_image: xcode11.2
       language: generic
-      env: TOX_ENV=py27
-      before_install:
-        - brew update
-        - brew upgrade python
-        - python3 -m venv venv
-        - source venv/bin/activate
+      env: TOX_ENV=py37
     - os: linux
       python: 3.6
       env: TOX_ENV=lint
@@ -32,5 +28,5 @@ matrix:
       python: 3.6
       env: TOX_ENV=coverage
 install:
-  - pip install Babel tox
+  - pip install tox
 script: tox -e $TOX_ENV
