@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     setup(
         name="pytest-tap",
-        version="2.4.1",
+        version="2.4",
         url="https://github.com/python-tap/pytest-tap",
         license="BSD",
         author="Matt Layman",
