@@ -1,6 +1,12 @@
 Releases
 ========
 
+Version 2.4.1, December 26, 2019
+--------------------------------
+
+* Last supported version for Python 2.
+* Pin tap.py to a version range that supports Python 2.
+
 Version 2.4, October 21, 2019
 -----------------------------
 

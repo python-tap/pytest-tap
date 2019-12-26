@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     setup(
         name="pytest-tap",
-        version="2.4",
+        version="2.4.1",
         url="https://github.com/python-tap/pytest-tap",
         license="BSD",
         author="Matt Layman",
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         include_package_data=True,
         zip_safe=False,
         platforms="any",
-        install_requires=["pytest", "six", "tap.py>=2.5"],
+        install_requires=["pytest", "six", "tap.py>=2.5,<3.0"],
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "Framework :: Pytest",
