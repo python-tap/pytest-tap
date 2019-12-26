@@ -1,9 +1,10 @@
 babel
+black
 bump2version
 flake8
+pre-commit
 requests
 tox
 twine
-black
-pre-commit
+wheel
 -e .
