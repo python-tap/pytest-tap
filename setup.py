@@ -61,7 +61,7 @@ if __name__ == "__main__":
         include_package_data=True,
         zip_safe=False,
         platforms="any",
-        install_requires=["pytest", "six", "tap.py>=2.5,<3.0"],
+        install_requires=["pytest", "six", "tap.py>=2.5,<4.0"],
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "Framework :: Pytest",
