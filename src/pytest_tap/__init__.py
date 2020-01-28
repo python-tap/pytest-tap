@@ -1,3 +1,3 @@
-# Copyright (c) 2019, Matt Layman
+# Copyright (c) 2020, Matt Layman
 
 __version__ = "2.5"
