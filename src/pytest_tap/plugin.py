@@ -1,13 +1,10 @@
 # Copyright (c) 2020, Matt Layman
 
-try:
-    from cStringIO import StringIO
-except ImportError:  # pragma: no cover
-    from io import StringIO
 import sys
+from io import StringIO
 
-from py.io import TerminalWriter
 import pytest
+from py.io import TerminalWriter
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
