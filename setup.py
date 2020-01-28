@@ -1,4 +1,4 @@
-# Copyright (c) 2019, Matt Layman
+# Copyright (c) 2020, Matt Layman
 """
 pytest-tap is a reporting plugin for pytest that outputs
 `Test Anything Protocol (TAP) <http://testanything.org/>`_ data.
@@ -61,14 +61,13 @@ if __name__ == "__main__":
         include_package_data=True,
         zip_safe=False,
         platforms="any",
-        install_requires=["pytest", "six", "tap.py>=2.5,<4.0"],
+        install_requires=["pytest", "tap.py>=3.0,<4.0"],
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "Framework :: Pytest",
             "Intended Audience :: Developers",
             "License :: OSI Approved :: BSD License",
             "Operating System :: OS Independent",
-            "Programming Language :: Python :: 2.7",
             "Programming Language :: Python :: 3.5",
             "Programming Language :: Python :: 3.6",
             "Programming Language :: Python :: 3.7",
