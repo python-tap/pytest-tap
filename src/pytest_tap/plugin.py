@@ -1,10 +1,8 @@
 # Copyright (c) 2020, Matt Layman
 
 import sys
-from io import StringIO
 
 import pytest
-from py.io import TerminalWriter
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
@@ -129,10 +127,7 @@ def pytest_runtest_logreport(report):
 
 def _make_as_diagnostics(report):
     """Format a report as TAP diagnostic output."""
-    out = StringIO()
-    tw = TerminalWriter(file=out)
-    report.toterminal(tw)
-    lines = out.getvalue().splitlines(True)
+    lines = report.longreprtext.splitlines(True)
     return format_as_diagnostics(lines)
 
 
