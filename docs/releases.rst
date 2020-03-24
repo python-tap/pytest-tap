@@ -1,6 +1,12 @@
 Releases
 ========
 
+Version 3.1, Released March 25, 2020
+------------------------------------
+
+* Fix reporting that was broken by the removal
+  of a deprecated feature in pytest 5.4.
+
 Version 3.0, Released January 28, 2020
 --------------------------------------
 
