@@ -134,12 +134,41 @@ def test_xfail_strict_function(testdir):
 
     result.stdout.fnmatch_lines(
         [
-            (
-                "ok 1 test_xfail_strict_function.py::test_unexpected_pass "
-                "# TODO unexpected success: a reason"
-            ),
+            "ok 1 test_xfail_strict_function.py::test_unexpected_pass "
+            "# TODO unexpected success: a reason",
             "not ok 2 test_xfail_strict_function.py::test_broken # TODO",
             "# [XPASS(strict)] a reason",
+        ]
+    )
+
+
+def test_unittest_expected_failure(testdir):
+    """The plugin handles unittest's expectedFailure decorator behavior."""
+    testdir.makepyfile(
+        """
+        import pytest
+        import unittest
+
+        class TestExpectedFailure(unittest.TestCase):
+            @unittest.expectedFailure
+            def test_when_failing(self):
+                assert False
+
+            @unittest.expectedFailure
+            def test_when_passing(self):
+                assert True
+    """
+    )
+    result = testdir.runpytest_subprocess("--tap-stream")
+
+    result.stdout.fnmatch_lines(
+        [
+            "not ok 1 test_unittest_expected_failure.py::"
+            "TestExpectedFailure.test_when_failing"
+            " # TODO expected failure: reason: ",
+            "ok 2 test_unittest_expected_failure.py::"
+            "TestExpectedFailure.test_when_passing"
+            " # TODO unexpected success: reason: ",
         ]
     )
 
