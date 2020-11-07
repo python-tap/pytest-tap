@@ -8,8 +8,6 @@ pytest-tap uses the `venv` module
 and a requirements file
 to manage development.
 
-After installing Pipenv:
-
 ```bash
 $ git clone git@github.com:python-tap/pytest-tap.git
 $ cd pytest-tap
@@ -24,3 +22,18 @@ Once your feature or bug fix is ready,
 [submit a Pull Request](https://help.github.com/articles/creating-a-pull-request/>).
 
 ...profit! :moneybag:
+
+# Making Releases
+
+pytest-tap uses `bump2version`
+to set the proper version
+for releases.
+
+The steps to release are roughly:
+
+```bash
+# Set docs/releases.rst with an appropriate changelog.
+$ bump2version minor
+$ python setup.py release
+$ twine upload dist/*
+```

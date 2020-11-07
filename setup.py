@@ -9,6 +9,8 @@ Developer documentation is on
 `Read the Docs <https://tappy.readthedocs.io/>`_.
 """
 
+import os
+import shutil
 from setuptools import find_packages, setup
 from setuptools import Command
 
@@ -35,6 +37,9 @@ class ReleaseCommand(Command):
         The custom command is used to ensure that compiling
         po to mo is not skipped.
         """
+        if os.path.exists("dist"):
+            print("Removing dist directory...")
+            shutil.rmtree("dist")
         self.run_command("compile_catalog")
         self.run_command("sdist")
         self.run_command("bdist_wheel")
