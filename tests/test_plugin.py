@@ -215,11 +215,11 @@ def test_unittest_expected_failure(testdir):
     result.stdout.fnmatch_lines(
         [
             "not ok 1 test_unittest_expected_failure.py::"
-            "TestExpectedFailure.test_when_failing"
-            " # TODO expected failure",
+            "TestExpectedFailure.test_when_failing "
+            "# TODO expected failure",
             "ok 2 test_unittest_expected_failure.py::"
-            "TestExpectedFailure.test_when_passing"
-            " # TODO unexpected success",
+            "TestExpectedFailure.test_when_passing "
+            "# TODO unexpected success",
         ]
     )
 
