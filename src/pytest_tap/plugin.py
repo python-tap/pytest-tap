@@ -98,28 +98,42 @@ def pytest_runtest_logreport(report):
     # Handle xfails first because they report in unusual ways.
     # Non-strict xfails will include `wasxfail` while strict xfails won't.
     if hasattr(report, "wasxfail"):
-        directive = ""
-        if report.skipped:
-            directive = "TODO expected failure: {}".format(report.wasxfail)
-        elif report.passed:
-            directive = "TODO unexpected success: {}".format(report.wasxfail)
+        reason = ""
+        # pytest adds an ugly "reason: " for expectedFailure
+        # even though the standard library doesn't accept a reason for that decorator.
+        # Ignore the "reason: " from pytest.
+        if report.wasxfail and report.wasxfail != "reason: ":
+            reason = ": {}".format(report.wasxfail)
 
-        tracker.add_ok(testcase, description, directive=directive)
+        if report.skipped:
+            directive = "TODO expected failure{}".format(reason)
+            tracker.add_not_ok(testcase, description, directive=directive)
+        elif report.passed:
+            directive = "TODO unexpected success{}".format(reason)
+            tracker.add_ok(testcase, description, directive=directive)
     elif report.passed:
         tracker.add_ok(testcase, description)
     elif report.failed:
         diagnostics = _make_as_diagnostics(report)
 
-        # strict xfail mode should include the todo directive.
-        # The only indicator that strict xfail occurred for this report
-        # is to check longrepr.
-        directive = ""
-        if isinstance(report.longrepr, str) and "[XPASS(strict)]" in report.longrepr:
-            directive = "TODO"
+        # pytest treats an unexpected success from unitest.expectedFailure as a failure.
+        # To match up with TAPTestResult and the TAP spec, treat the pass
+        # as an ok with a todo directive instead.
+        if isinstance(report.longrepr, str) and "Unexpected success" in report.longrepr:
+            tracker.add_ok(testcase, description, directive="TODO unexpected success")
+            return
 
-        tracker.add_not_ok(
-            testcase, description, directive=directive, diagnostics=diagnostics
-        )
+        # A strict xfail that passes (i.e., XPASS) should be marked as a failure.
+        # The only indicator that strict xfail occurred for XPASS is to check longrepr.
+        if isinstance(report.longrepr, str) and "[XPASS(strict)]" in report.longrepr:
+            tracker.add_not_ok(
+                testcase,
+                description,
+                directive="unexpected success: {}".format(report.longrepr),
+            )
+            return
+
+        tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
     elif report.skipped:
         reason = report.longrepr[2].split(":", 1)[1].strip()
         tracker.add_skip(testcase, description, reason)
@@ -127,7 +141,7 @@ def pytest_runtest_logreport(report):
 
 def _make_as_diagnostics(report):
     """Format a report as TAP diagnostic output."""
-    lines = report.longreprtext.splitlines(True)
+    lines = report.longreprtext.splitlines(keepends=True)
     return format_as_diagnostics(lines)
 
 

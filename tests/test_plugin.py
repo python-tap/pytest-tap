@@ -57,7 +57,7 @@ def test_stream(testdir, sample_test_file):
             "ok 3 test_stream.py::test_params[foo]",
             "ok 4 test_stream.py::test_params[bar]",
             "ok 5 test_stream.py::test_skipped # SKIP some reason",
-            "ok 6 test_stream.py::test_broken # TODO expected failure: a reason",
+            "not ok 6 test_stream.py::test_broken # TODO expected failure: a reason",
         ]
     )
 
@@ -78,7 +78,7 @@ def test_combined(testdir, sample_test_file):
         "ok 3 test_combined.py::test_params[foo]",
         "ok 4 test_combined.py::test_params[bar]",
         "ok 5 test_combined.py::test_skipped # SKIP some reason",
-        "ok 6 test_combined.py::test_broken # TODO expected failure: a reason",
+        "not ok 6 test_combined.py::test_broken # TODO expected failure: a reason",
     ]
     # If the dependencies for version 13 happen to be installed, tweak the output.
     if ENABLE_VERSION_13:
@@ -112,34 +112,114 @@ def test_outdir(testdir, sample_test_file):
     assert testresults.check()
 
 
-def test_xfail_strict_function(testdir):
-    """An xfail with strict on will fail when it unexpectedly passes.
-
-    The xfail should look like an xfail by including the TODO directive.
-    """
+def test_xfail_no_reason(testdir):
+    """xfails output gracefully when no reason is provided."""
     testdir.makepyfile(
         """
         import pytest
 
-        @pytest.mark.xfail(reason='a reason')
-        def test_unexpected_pass():
+        @pytest.mark.xfail(strict=False)
+        def test_unexpected_success():
             assert True
 
-        @pytest.mark.xfail(reason='a reason', strict=True)
-        def test_broken():
-            assert True
+        @pytest.mark.xfail(strict=False)
+        def test_expected_failure():
+            assert False
     """
     )
     result = testdir.runpytest_subprocess("--tap-stream")
 
     result.stdout.fnmatch_lines(
         [
-            (
-                "ok 1 test_xfail_strict_function.py::test_unexpected_pass "
-                "# TODO unexpected success: a reason"
-            ),
-            "not ok 2 test_xfail_strict_function.py::test_broken # TODO",
-            "# [XPASS(strict)] a reason",
+            "ok 1 test_xfail_no_reason.py::test_unexpected_success "
+            "# TODO unexpected success",
+            "not ok 2 test_xfail_no_reason.py::test_expected_failure "
+            "# TODO expected failure",
+        ]
+    )
+
+
+def test_xfail_nonstrict(testdir):
+    """Non-strict xfails are treated as TODO directives."""
+    testdir.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.xfail(strict=False, reason='a reason')
+        def test_unexpected_success():
+            assert True
+
+        @pytest.mark.xfail(strict=False, reason='a reason')
+        def test_expected_failure():
+            assert False
+    """
+    )
+    result = testdir.runpytest_subprocess("--tap-stream")
+
+    result.stdout.fnmatch_lines(
+        [
+            "ok 1 test_xfail_nonstrict.py::test_unexpected_success "
+            "# TODO unexpected success: a reason",
+            "not ok 2 test_xfail_nonstrict.py::test_expected_failure "
+            "# TODO expected failure: a reason",
+        ]
+    )
+
+
+def test_xfail_strict(testdir):
+    """xfail strict mode handles expected behavior."""
+    testdir.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.xfail(strict=True, reason='a reason')
+        def test_unexpected_success():
+            assert True
+
+        @pytest.mark.xfail(strict=True, reason='a reason')
+        def test_expected_failure():
+            assert False
+    """
+    )
+    result = testdir.runpytest_subprocess("--tap-stream")
+
+    result.stdout.fnmatch_lines(
+        [
+            "not ok 1 test_xfail_strict.py::test_unexpected_success "
+            "# unexpected success: [XPASS(strict)] a reason",
+            "not ok 2 test_xfail_strict.py::test_expected_failure "
+            "# TODO expected failure: a reason",
+        ]
+    )
+
+
+def test_unittest_expected_failure(testdir):
+    """The plugin handles unittest's expectedFailure decorator behavior."""
+    testdir.makepyfile(
+        """
+        import pytest
+        import unittest
+
+        class TestExpectedFailure(unittest.TestCase):
+            @unittest.expectedFailure
+            def test_when_failing(self):
+                assert False
+
+            @unittest.expectedFailure
+            def test_when_passing(self):
+                assert True
+    """
+    )
+    result = testdir.runpytest_subprocess("--tap-stream")
+
+    result.stdout.fnmatch_lines(
+        [
+            "not ok 1 test_unittest_expected_failure.py::"
+            "TestExpectedFailure.test_when_failing "
+            "# TODO expected failure",
+            "ok 2 test_unittest_expected_failure.py::"
+            "TestExpectedFailure.test_when_passing "
+            "# TODO unexpected success",
         ]
     )
 
