@@ -6,6 +6,9 @@ Version 3.2, To Be Released
 
 * Add support for Python 3.8.
 * Add support for Python 3.9.
+* Handle ``unittest.expectedFailure`` and ``pytest.xfail``
+  in a way that is more consistent
+  with the TAP specification.
 
 Version 3.1, Released March 25, 2020
 ------------------------------------
