@@ -1,6 +1,11 @@
 Releases
 ========
 
+Version 3.3, TBD
+----------------
+
+* Drop support for Python 3.5 (it is end-of-life).
+
 Version 3.2, November 7, 2020
 -----------------------------
 
