@@ -1,5 +1,3 @@
-# Copyright (c) 2020, Matt Layman
-
 from ConfigParser import ConfigParser, NoOptionError, NoSectionError
 import os
 import sys

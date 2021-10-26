@@ -1,5 +1,3 @@
-# Copyright (c) 2020, Matt Layman
-
 import gettext
 import os
 

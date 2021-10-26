@@ -1,4 +1,3 @@
-# Copyright (c) 2020, Matt Layman
 """
 pytest-tap is a reporting plugin for pytest that outputs
 `Test Anything Protocol (TAP) <http://testanything.org/>`_ data.

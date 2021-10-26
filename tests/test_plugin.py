@@ -1,5 +1,3 @@
-# Copyright (c) 2020, Matt Layman
-
 import pytest
 
 from tap.tracker import ENABLE_VERSION_13
