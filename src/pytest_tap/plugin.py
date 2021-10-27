@@ -46,16 +46,21 @@ def pytest_addoption(parser):
 @pytest.mark.trylast
 def pytest_configure(config):
     """Set all the options before the test run."""
+    # The help printing uses the terminalreporter,
+    # which is unregistered by the streaming mode.
+    if config.option.help:
+        return
+
     global ENABLED
     ENABLED = (
-        config.getoption("tap_stream")
-        or config.getoption("tap_combined")
-        or config.getoption("tap_files")
+        config.option.tap_stream
+        or config.option.tap_combined
+        or config.option.tap_files
     )
 
-    tracker.outdir = config.getoption("tap_outdir")
-    tracker.combined = config.getoption("tap_combined")
-    if config.getoption("tap_stream"):
+    tracker.outdir = config.option.tap_outdir
+    tracker.combined = config.option.tap_combined
+    if config.option.tap_stream:
         reporter = config.pluginmanager.getplugin("terminalreporter")
         if reporter:
             config.pluginmanager.unregister(reporter)
@@ -70,11 +75,9 @@ def pytest_configure(config):
 
 def pytest_runtestloop(session):
     """Output the plan line first."""
-    if ENABLED:
-        if session.config.getoption("tap_stream") or session.config.getoption(
-            "tap_combined"
-        ):
-            tracker.set_plan(session.testscollected)
+    option = session.config.option
+    if ENABLED and (option.tap_stream or option.tap_combined):
+        tracker.set_plan(session.testscollected)
 
 
 def pytest_runtest_logreport(report):
