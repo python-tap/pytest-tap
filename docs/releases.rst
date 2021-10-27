@@ -1,8 +1,8 @@
 Releases
 ========
 
-Version 3.3, TBD
-----------------
+Version 3.3, October 27, 2021
+-----------------------------
 
 * Add support for Python 3.10.
 * Fix bug with help printing when streaming mode is enabled (#59).
