@@ -8,40 +8,7 @@ Developer documentation is on
 `Read the Docs <https://tappy.readthedocs.io/>`_.
 """
 
-import os
-import shutil
 from setuptools import find_packages, setup
-from setuptools import Command
-
-
-class ReleaseCommand(Command):
-    description = "generate distribution release artifacts"
-    user_options = []
-
-    def initialize_options(self):
-        """Initialize options.
-
-        This method overrides a required abstract method.
-        """
-
-    def finalize_options(self):
-        """Finalize options.
-
-        This method overrides a required abstract method.
-        """
-
-    def run(self):
-        """Generate the distribution release artifacts.
-
-        The custom command is used to ensure that compiling
-        po to mo is not skipped.
-        """
-        if os.path.exists("dist"):
-            print("Removing dist directory...")
-            shutil.rmtree("dist")
-        self.run_command("compile_catalog")
-        self.run_command("sdist")
-        self.run_command("bdist_wheel")
 
 
 if __name__ == "__main__":
@@ -81,5 +48,4 @@ if __name__ == "__main__":
             "Topic :: Software Development :: Testing",
         ],
         keywords=["TAP", "unittest", "pytest"],
-        cmdclass={"release": ReleaseCommand},
     )

@@ -4,8 +4,6 @@ import pytest
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
-from pytest_tap.i18n import _
-
 # Because of how pytest hooks work, there is not much choice
 # except to use module level state. Ugh.
 tracker = Tracker()
@@ -19,24 +17,24 @@ def pytest_addoption(parser):
         "--tap-stream",
         default=False,
         action="store_true",
-        help=_("Stream TAP output instead of the default test runner output."),
+        help="Stream TAP output instead of the default test runner output.",
     )
     group.addoption(
         "--tap-files",
         default=False,
         action="store_true",
-        help=_("Store all TAP test results into individual files per test case."),
+        help="Store all TAP test results into individual files per test case.",
     )
     group.addoption(
         "--tap-combined",
         default=False,
         action="store_true",
-        help=_("Store all TAP test results into a combined output file."),
+        help="Store all TAP test results into a combined output file.",
     )
     group.addoption(
         "--tap-outdir",
         metavar="path",
-        help=_(
+        help=(
             "An optional output directory to write TAP files to. "
             "If the directory does not exist, it will be created."
         ),

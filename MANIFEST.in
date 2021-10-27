@@ -2,4 +2,3 @@ include AUTHORS
 include LICENSE
 include README.rst
 include docs/releases.rst
-recursive-include src/pytest_tap/locale *

@@ -9,18 +9,6 @@ pytest-tap
 .. |license| image:: https://img.shields.io/pypi/l/pytest-tap.svg
     :target: https://raw.githubusercontent.com/python-tap/pytest-tap/master/LICENSE
     :alt: BSD license
-.. |downloads| image:: https://img.shields.io/pypi/dm/pytest-tap.svg
-    :target: https://pypi.python.org/pypi/pytest-tap
-    :alt: Downloads
-.. |travis| image:: https://img.shields.io/travis/python-tap/pytest-tap/master.svg?label=linux+build
-    :target: https://travis-ci.org/python-tap/pytest-tap
-    :alt: Linux status
-.. |travismac| image:: https://img.shields.io/travis/python-tap/pytest-tap/master.svg?label=macOS+build
-    :target: https://travis-ci.org/python-tap/pytest-tap
-    :alt: macOS status
-.. |appveyor| image:: https://img.shields.io/appveyor/ci/mblayman/pytest-tap/master.svg?label=windows+build
-    :target: https://ci.appveyor.com/project/mblayman/pytest-tap
-    :alt: Windows status
 .. |coverage| image:: https://img.shields.io/codecov/c/github/python-tap/pytest-tap.svg
     :target: https://codecov.io/github/python-tap/pytest-tap
     :alt: Coverage
