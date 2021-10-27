@@ -34,6 +34,6 @@ The steps to release are roughly:
 ```bash
 # Set docs/releases.rst with an appropriate changelog.
 $ bump2version minor
-$ python setup.py release
+$ python -m build
 $ twine upload dist/*
 ```

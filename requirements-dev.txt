@@ -1,4 +1,5 @@
 black
+build
 bump2version
 flake8
 pre-commit
