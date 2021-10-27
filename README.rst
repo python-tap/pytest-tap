@@ -1,7 +1,7 @@
 pytest-tap
 ==========
 
-|version| |license| |travis| |travismac| |appveyor| |coverage|
+|version| |license| |coverage|
 
 .. |version| image:: https://img.shields.io/pypi/v/pytest-tap.svg
     :target: https://pypi.python.org/pypi/pytest-tap
