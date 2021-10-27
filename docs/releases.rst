@@ -4,6 +4,7 @@ Releases
 Version 3.3, TBD
 ----------------
 
+* Add support for Python 3.10.
 * Fix bug with help printing when streaming mode is enabled (#59).
 * Drop support for Python 3.5 (it is end-of-life).
 
