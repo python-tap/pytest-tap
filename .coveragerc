@@ -1,0 +1,4 @@
+[paths]
+source =
+    src/pytest_tap
+    */site-packages/pytest_tap
