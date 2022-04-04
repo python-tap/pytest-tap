@@ -168,16 +168,13 @@ def test_unittest_expected_failure(testdir):
     )
     result = testdir.runpytest_subprocess("--tap-stream")
 
-    result.stdout.fnmatch_lines(
-        [
-            "not ok 1 test_unittest_expected_failure.py::"
-            "TestExpectedFailure.test_when_failing "
-            "# TODO expected failure",
-            "ok 2 test_unittest_expected_failure.py::"
-            "TestExpectedFailure.test_when_passing "
-            "# TODO unexpected success",
-        ]
-    )
+    expected = [
+        "not ok 1 test_unittest_expected_failure.py::"
+        "TestExpectedFailure.test_when_failing # TODO expected failure",
+        "ok 2 test_unittest_expected_failure.py::"
+        "TestExpectedFailure.test_when_passing # TODO unexpected success",
+    ]
+    result.stdout.fnmatch_lines(expected)
 
 
 def test_setup_failure(testdir):

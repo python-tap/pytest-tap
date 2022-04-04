@@ -118,7 +118,7 @@ def pytest_runtest_logreport(report):
         # pytest treats an unexpected success from unitest.expectedFailure as a failure.
         # To match up with TAPTestResult and the TAP spec, treat the pass
         # as an ok with a todo directive instead.
-        if isinstance(report.longrepr, str) and "Unexpected success" in report.longrepr:
+        if "Unexpected success" in str(report.longrepr):
             tracker.add_ok(testcase, description, directive="TODO unexpected success")
             return
 
