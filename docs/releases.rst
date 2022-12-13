@@ -1,6 +1,11 @@
 Releases
 ========
 
+Version 3.4, To Be Released
+---------------------------
+
+* Drop support for Python 3.6 (it is end-of-life).
+
 Version 3.3, October 27, 2021
 -----------------------------
 
