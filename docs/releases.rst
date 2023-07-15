@@ -4,7 +4,10 @@ Releases
 Version 3.4, To Be Released
 ---------------------------
 
+* Add support for Python 3.11.
+* Drop support for Python 3.7 (it is end-of-life).
 * Drop support for Python 3.6 (it is end-of-life).
+* Drop support for PyPy.
 
 Version 3.3, October 27, 2021
 -----------------------------
