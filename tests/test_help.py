@@ -3,7 +3,7 @@ def test_includes_options(testdir):
     result = testdir.runpytest("--help")
 
     expected_option_flags = [
-        "*--tap-stream*",
+        "*--tap *",
         "*--tap-files*",
         "*--tap-combined*",
         "*--tap-outdir=path*",
@@ -17,7 +17,7 @@ def test_handle_help_with_stream(testdir):
     This demonstrates behavior reported in:
     https://github.com/python-tap/pytest-tap/issues/59
     """
-    result = testdir.runpytest("--tap-stream", "-h")
+    result = testdir.runpytest("--tap", "-h")
 
-    expected_option_flags = ["*--tap-stream*"]
+    expected_option_flags = ["*--tap *"]
     result.stdout.fnmatch_lines(expected_option_flags)
