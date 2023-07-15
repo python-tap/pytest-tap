@@ -101,7 +101,7 @@ def test_xfail_no_reason(testdir):
             assert False
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         [
@@ -128,7 +128,7 @@ def test_xfail_nonstrict(testdir):
             assert False
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         [
@@ -155,7 +155,7 @@ def test_xfail_strict(testdir):
             assert False
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         [
@@ -184,7 +184,7 @@ def test_unittest_expected_failure(testdir):
                 assert True
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     expected = [
         "not ok 1 test_unittest_expected_failure.py::"
@@ -212,7 +212,7 @@ def test_setup_failure(testdir):
             assert True
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         ["1..1", "not ok 1 test_setup_failure.py::test_with_bad_fixture"]
