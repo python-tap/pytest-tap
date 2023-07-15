@@ -47,7 +47,7 @@ def pytest_addoption(parser):
     )
 
 
-@pytest.mark.trylast
+@pytest.hookimpl(trylast=True)
 def pytest_configure(config):
     """Set all the options before the test run."""
     # The help printing uses the terminalreporter,
