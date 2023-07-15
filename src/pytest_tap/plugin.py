@@ -5,10 +5,102 @@ import pytest
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
-# Because of how pytest hooks work, there is not much choice
-# except to use module level state. Ugh.
-tracker = Tracker()
-ENABLED = False
+
+class TAPPlugin:
+    def __init__(self, config: pytest.Config) -> None:
+        self._tracker = Tracker(
+            outdir=config.option.tap_outdir,
+            combined=config.option.tap_combined,
+            streaming=config.option.tap_stream,
+            stream=sys.stdout,
+        )
+
+        if self._tracker.streaming:
+            reporter = config.pluginmanager.getplugin("terminalreporter")
+            if reporter:
+                config.pluginmanager.unregister(reporter)
+            # A common pytest pattern is to use test functions without classes.
+            # The header looks really dumb for that pattern because it puts
+            # out a lot of line noise since every function gets its own header.
+            # Disable it automatically for streaming.
+            self._tracker.header = False
+
+    @pytest.hookimpl()
+    def pytest_runtestloop(self, session):
+        """Output the plan line first."""
+        option = session.config.option
+        if option.tap_stream or option.tap_combined:
+            self._tracker.set_plan(session.testscollected)
+
+    @pytest.hookimpl()
+    def pytest_runtest_logreport(self, report: pytest.TestReport):
+        """Add a test result to the tracker."""
+        is_trackable_result = (
+            (report.when == "setup" and report.outcome == "skipped")
+            or (report.when == "setup" and report.outcome == "failed")
+            or report.when == "call"
+        )
+        if not is_trackable_result:
+            return
+
+        description = str(report.location[0]) + "::" + str(report.location[2])
+        testcase = report.location[0]
+
+        # Handle xfails first because they report in unusual ways.
+        # Non-strict xfails will include `wasxfail` while strict xfails won't.
+        if hasattr(report, "wasxfail"):
+            reason = ""
+            # pytest adds an ugly "reason: " for expectedFailure
+            # even though the standard library doesn't accept a reason
+            # for that decorator.
+            # Ignore the "reason: " from pytest.
+            if report.wasxfail and report.wasxfail != "reason: ":
+                reason = ": {}".format(report.wasxfail)
+
+            if report.skipped:
+                directive = "TODO expected failure{}".format(reason)
+                self._tracker.add_not_ok(testcase, description, directive=directive)
+            elif report.passed:
+                directive = "TODO unexpected success{}".format(reason)
+                self._tracker.add_ok(testcase, description, directive=directive)
+        elif report.passed:
+            self._tracker.add_ok(testcase, description)
+        elif report.failed:
+            diagnostics = _make_as_diagnostics(report)
+
+            # pytest treats an unexpected success from unitest.expectedFailure
+            # as a failure.
+            # To match up with TAPTestResult and the TAP spec, treat the pass
+            # as an ok with a todo directive instead.
+            if "Unexpected success" in str(report.longrepr):
+                self._tracker.add_ok(
+                    testcase, description, directive="TODO unexpected success"
+                )
+                return
+
+            # A strict xfail that passes (i.e., XPASS) should be marked as a failure.
+            # The only indicator that strict xfail occurred
+            # for XPASS is to check longrepr.
+            if (
+                isinstance(report.longrepr, str)
+                and "[XPASS(strict)]" in report.longrepr
+            ):
+                self._tracker.add_not_ok(
+                    testcase,
+                    description,
+                    directive="unexpected success: {}".format(report.longrepr),
+                )
+                return
+
+            self._tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
+        elif report.skipped:
+            reason = report.longrepr[2].split(":", 1)[1].strip()  # type: ignore
+            self._tracker.add_skip(testcase, description, reason)
+
+    @pytest.hookimpl()
+    def pytest_unconfigure(self, config: pytest.Config):
+        """Dump the results."""
+        self._tracker.generate_tap_reports()
 
 
 def pytest_addoption(parser):
@@ -48,109 +140,22 @@ def pytest_addoption(parser):
 
 
 @pytest.hookimpl(trylast=True)
-def pytest_configure(config):
-    """Set all the options before the test run."""
+def pytest_configure(config: pytest.Config) -> None:
+    """Enable the plugin if the TAP flags are used."""
     # The help printing uses the terminalreporter,
     # which is unregistered by the streaming mode.
     if config.option.help:
         return
 
-    global ENABLED
-    ENABLED = (
+    if (
         config.option.tap_stream
         or config.option.tap_combined
         or config.option.tap_files
-    )
-
-    tracker.outdir = config.option.tap_outdir
-    tracker.combined = config.option.tap_combined
-    if config.option.tap_stream:
-        reporter = config.pluginmanager.getplugin("terminalreporter")
-        if reporter:
-            config.pluginmanager.unregister(reporter)
-        tracker.streaming = True
-        tracker.stream = sys.stdout
-        # A common pytest pattern is to use test functions without classes.
-        # The header looks really dumb for that pattern because it puts
-        # out a lot of line noise since every function gets its own header.
-        # Disable it automatically for streaming.
-        tracker.header = False
-
-
-def pytest_runtestloop(session):
-    """Output the plan line first."""
-    option = session.config.option
-    if ENABLED and (option.tap_stream or option.tap_combined):
-        tracker.set_plan(session.testscollected)
-
-
-def pytest_runtest_logreport(report):
-    """Add a test result to the tracker."""
-    if not ENABLED:
-        return
-
-    is_trackable_result = (
-        (report.when == "setup" and report.outcome == "skipped")
-        or (report.when == "setup" and report.outcome == "failed")
-        or report.when == "call"
-    )
-    if not is_trackable_result:
-        return
-
-    description = str(report.location[0]) + "::" + str(report.location[2])
-    testcase = report.location[0]
-
-    # Handle xfails first because they report in unusual ways.
-    # Non-strict xfails will include `wasxfail` while strict xfails won't.
-    if hasattr(report, "wasxfail"):
-        reason = ""
-        # pytest adds an ugly "reason: " for expectedFailure
-        # even though the standard library doesn't accept a reason for that decorator.
-        # Ignore the "reason: " from pytest.
-        if report.wasxfail and report.wasxfail != "reason: ":
-            reason = ": {}".format(report.wasxfail)
-
-        if report.skipped:
-            directive = "TODO expected failure{}".format(reason)
-            tracker.add_not_ok(testcase, description, directive=directive)
-        elif report.passed:
-            directive = "TODO unexpected success{}".format(reason)
-            tracker.add_ok(testcase, description, directive=directive)
-    elif report.passed:
-        tracker.add_ok(testcase, description)
-    elif report.failed:
-        diagnostics = _make_as_diagnostics(report)
-
-        # pytest treats an unexpected success from unitest.expectedFailure as a failure.
-        # To match up with TAPTestResult and the TAP spec, treat the pass
-        # as an ok with a todo directive instead.
-        if "Unexpected success" in str(report.longrepr):
-            tracker.add_ok(testcase, description, directive="TODO unexpected success")
-            return
-
-        # A strict xfail that passes (i.e., XPASS) should be marked as a failure.
-        # The only indicator that strict xfail occurred for XPASS is to check longrepr.
-        if isinstance(report.longrepr, str) and "[XPASS(strict)]" in report.longrepr:
-            tracker.add_not_ok(
-                testcase,
-                description,
-                directive="unexpected success: {}".format(report.longrepr),
-            )
-            return
-
-        tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
-    elif report.skipped:
-        reason = report.longrepr[2].split(":", 1)[1].strip()
-        tracker.add_skip(testcase, description, reason)
+    ):
+        config.pluginmanager.register(TAPPlugin(config), "tapplugin")
 
 
 def _make_as_diagnostics(report):
     """Format a report as TAP diagnostic output."""
     lines = report.longreprtext.splitlines(keepends=True)
     return format_as_diagnostics(lines)
-
-
-def pytest_unconfigure(config):
-    """Dump the results."""
-    if ENABLED:
-        tracker.generate_tap_reports()
