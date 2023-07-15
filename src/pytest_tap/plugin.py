@@ -32,6 +32,12 @@ class TAPPlugin:
         if option.tap_stream or option.tap_combined:
             self._tracker.set_plan(session.testscollected)
 
+    @pytest.hookimpl(optionalhook=True)
+    def pytest_xdist_node_collection_finished(self, node, ids):
+        """Output the plan line first when using xdist."""
+        if self._tracker.streaming or self._tracker.combined:
+            self._tracker.set_plan(len(ids))
+
     @pytest.hookimpl()
     def pytest_runtest_logreport(self, report: pytest.TestReport):
         """Add a test result to the tracker."""
