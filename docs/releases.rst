@@ -4,6 +4,7 @@ Releases
 Version 3.4, To Be Released
 ---------------------------
 
+* Deprecate ``--tap-stream`` in favor of ``--tap`` for streaming mode.
 * Add support for Python 3.11.
 * Drop support for Python 3.7 (it is end-of-life).
 * Drop support for Python 3.6 (it is end-of-life).

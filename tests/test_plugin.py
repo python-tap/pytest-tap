@@ -18,6 +18,24 @@ def test_stream(testdir, sample_test_file):
     )
 
 
+def test_stream_simple_flag(testdir, sample_test_file):
+    """Results are streamed to stdout when the shorter streaming flag."""
+    result = testdir.runpytest_subprocess("--tap")
+
+    result.stdout.fnmatch_lines(
+        [
+            "1..6",
+            "ok 1 test_stream_simple_flag.py::test_ok",
+            "not ok 2 test_stream_simple_flag.py::test_not_ok",
+            "ok 3 test_stream_simple_flag.py::test_params[foo]",
+            "ok 4 test_stream_simple_flag.py::test_params[bar]",
+            "ok 5 test_stream_simple_flag.py::test_skipped # SKIP some reason",
+            "not ok 6 test_stream_simple_flag.py::test_broken "
+            "# TODO expected failure: a reason",
+        ]
+    )
+
+
 def test_combined(testdir, sample_test_file):
     """Tests are combined into a single output file."""
     testdir.runpytest_subprocess("--tap-combined")
@@ -83,7 +101,7 @@ def test_xfail_no_reason(testdir):
             assert False
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         [
@@ -110,7 +128,7 @@ def test_xfail_nonstrict(testdir):
             assert False
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         [
@@ -137,7 +155,7 @@ def test_xfail_strict(testdir):
             assert False
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         [
@@ -166,7 +184,7 @@ def test_unittest_expected_failure(testdir):
                 assert True
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     expected = [
         "not ok 1 test_unittest_expected_failure.py::"
@@ -194,7 +212,7 @@ def test_setup_failure(testdir):
             assert True
     """
     )
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
         ["1..1", "not ok 1 test_setup_failure.py::test_with_bad_fixture"]

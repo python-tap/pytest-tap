@@ -1,3 +1,4 @@
+import argparse
 import sys
 
 import pytest
@@ -14,10 +15,15 @@ def pytest_addoption(parser):
     """Include all the command line options."""
     group = parser.getgroup("terminal reporting", "reporting", after="general")
     group.addoption(
-        "--tap-stream",
+        "--tap",
         default=False,
+        dest="tap_stream",
         action="store_true",
         help="Stream TAP output instead of the default test runner output.",
+    )
+    # Deprecated, but keeping for backwards compatibility.
+    group.addoption(
+        "--tap-stream", default=False, action="store_true", help=argparse.SUPPRESS
     )
     group.addoption(
         "--tap-files",

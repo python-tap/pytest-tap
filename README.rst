@@ -34,20 +34,20 @@ This is an example usage from the plugin's test suite.
 
 .. code-block:: console
 
-   $ pytest --tap-stream
+   $ pytest --tap
    1..12
-   ok 1 - TestPlugin.test_generates_reports_for_combined
-   ok 2 - TestPlugin.test_generates_reports_for_files
-   ok 3 - TestPlugin.test_generates_reports_for_stream
-   ok 4 - TestPlugin.test_includes_options
-   ok 5 - TestPlugin.test_skips_reporting_with_no_output_option
-   ok 6 - TestPlugin.test_track_when_call_report
-   ok 7 - TestPlugin.test_tracker_combined_set
-   ok 8 - TestPlugin.test_tracker_outdir_set
-   ok 9 - TestPlugin.test_tracker_stream_set
-   ok 10 - TestPlugin.test_tracks_not_ok
-   ok 11 - TestPlugin.test_tracks_ok
-   ok 12 - TestPlugin.test_tracks_skip
+   ok 1 tests/test_help.py::test_includes_options
+   ok 2 tests/test_help.py::test_handle_help_with_stream
+   ok 3 tests/test_plugin.py::test_stream
+   ok 4 tests/test_plugin.py::test_stream_simple_flag
+   ok 5 tests/test_plugin.py::test_combined
+   ok 6 tests/test_plugin.py::test_files
+   ok 7 tests/test_plugin.py::test_outdir
+   ok 8 tests/test_plugin.py::test_xfail_no_reason
+   ok 9 tests/test_plugin.py::test_xfail_nonstrict
+   ok 10 tests/test_plugin.py::test_xfail_strict
+   ok 11 tests/test_plugin.py::test_unittest_expected_failure
+   ok 12 tests/test_plugin.py::test_setup_failure
 
 Contributing
 ------------
