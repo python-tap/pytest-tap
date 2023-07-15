@@ -1,8 +1,8 @@
 Releases
 ========
 
-Version 3.4, To Be Released
----------------------------
+Version 3.4, July 15, 2023
+--------------------------
 
 * Deprecate ``--tap-stream`` in favor of ``--tap`` for streaming mode.
 * When using xdist, report the plan at the beginning of execution.
