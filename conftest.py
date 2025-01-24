@@ -8,11 +8,16 @@ def sample_test_file(testdir):
     testdir.makepyfile(
         """
         import pytest
+        import logging
+
+        LOGGER = logging.getLogger(__name__)
 
         def test_ok():
+            LOGGER.info("Running test_ok")
             assert True
 
         def test_not_ok():
+            LOGGER.error("Running test_not_ok")
             assert False
 
         @pytest.mark.parametrize('param', ("foo", "bar"))

@@ -25,6 +25,8 @@ class TAPPlugin:
             # Disable it automatically for streaming.
             self._tracker.header = False
 
+        self.tap_logging = config.option.tap_logging
+
     @pytest.hookimpl()
     def pytest_runtestloop(self, session):
         """Output the plan line first."""
@@ -72,7 +74,7 @@ class TAPPlugin:
         elif report.passed:
             self._tracker.add_ok(testcase, description)
         elif report.failed:
-            diagnostics = _make_as_diagnostics(report)
+            diagnostics = _make_as_diagnostics(report, self.tap_logging)
 
             # pytest treats an unexpected success from unitest.expectedFailure
             # as a failure.
@@ -143,6 +145,14 @@ def pytest_addoption(parser):
             "If the directory does not exist, it will be created."
         ),
     )
+    group.addoption(
+        "--tap-logging",
+        default="no",
+        help=(
+            "Write captured log messages to TAP report: one of"
+            "no|log|system-out|system-err|out-err|all"
+        ),
+    )
 
 
 @pytest.hookimpl(trylast=True)
@@ -161,7 +171,20 @@ def pytest_configure(config: pytest.Config) -> None:
         config.pluginmanager.register(TAPPlugin(config), "tapplugin")
 
 
-def _make_as_diagnostics(report):
+def _make_as_diagnostics(report, tap_logging):
     """Format a report as TAP diagnostic output."""
     lines = report.longreprtext.splitlines(keepends=True)
-    return format_as_diagnostics(lines)
+
+    content_all = format_as_diagnostics(lines)
+
+    if tap_logging in ["log", "all"]:
+        content_all += format_as_diagnostics(" Captured Log ")
+        content_all += format_as_diagnostics(report.caplog.splitlines(keepends=True))
+    if tap_logging in ["system-out", "out-err", "all"]:
+        content_all += format_as_diagnostics(" Captured Out ")
+        content_all += format_as_diagnostics(report.capstdout.splitlines(keepends=True))
+    if tap_logging in ["system-err", "out-err", "all"]:
+        content_all += format_as_diagnostics(" Captured Err ")
+        content_all += format_as_diagnostics(report.capstderr.splitlines(keepends=True))
+
+    return content_all
