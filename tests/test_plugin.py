@@ -85,6 +85,17 @@ def test_outdir(testdir, sample_test_file):
     testresults = outdir.join("testresults.tap")
     assert testresults.check()
 
+def test_logging(testdir, sample_test_file):
+    """Test logs are added to TAP diagnostics."""
+    result = testdir.runpytest_subprocess("--tap", "--tap-logging", "all")
+    result.stdout.fnmatch_lines(
+        [
+            "# Captured Log",
+            "# Captured Out",
+            "# Captured Err",
+            "*Running test_not_ok*"
+        ]
+    )
 
 def test_xfail_no_reason(testdir):
     """xfails output gracefully when no reason is provided."""
