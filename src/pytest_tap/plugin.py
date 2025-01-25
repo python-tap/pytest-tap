@@ -26,6 +26,7 @@ class TAPPlugin:
             self._tracker.header = False
 
         self.tap_logging = config.option.tap_logging
+        self.tap_log_passing_tests = config.option.tap_log_passing_tests
 
     @pytest.hookimpl()
     def pytest_runtestloop(self, session):
@@ -72,7 +73,10 @@ class TAPPlugin:
                 directive = "TODO unexpected success{}".format(reason)
                 self._tracker.add_ok(testcase, description, directive=directive)
         elif report.passed:
-            self._tracker.add_ok(testcase, description)
+            diagnostics = None
+            if self.tap_log_passing_tests:
+                diagnostics = _make_as_diagnostics(report, self.tap_logging)
+            self._tracker.add_ok(testcase, description, diagnostics=diagnostics)
         elif report.failed:
             diagnostics = _make_as_diagnostics(report, self.tap_logging)
 
@@ -152,6 +156,12 @@ def pytest_addoption(parser):
             "Write captured log messages to TAP report: one of"
             "no|log|system-out|system-err|out-err|all"
         ),
+    )
+    group.addoption(
+        "--tap-log-passing-tests",
+        default=False,
+        action="store_true",
+        help="Capture log information for passing tests to TAP report"
     )
 
 
