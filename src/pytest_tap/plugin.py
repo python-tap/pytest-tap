@@ -177,12 +177,12 @@ def _make_as_diagnostics(report, tap_logging):
 
     if tap_logging in ["log", "all"]:
         lines[-1] += "\n"
-        lines += [" Captured Log \n"] + (report.caplog.splitlines(keepends=True) or [""])
+        lines += ["--- Captured Log ---\n"] + (report.caplog.splitlines(keepends=True) or [""])
     if tap_logging in ["system-out", "out-err", "all"]:
         lines[-1] += "\n"
-        lines += [" Captured Out \n"] + (report.capstdout.splitlines(keepends=True) or [""])
+        lines += ["--- Captured Out ---\n"] + (report.capstdout.splitlines(keepends=True) or [""])
     if tap_logging in ["system-err", "out-err", "all"]:
         lines[-1] += "\n"
-        lines += [" Captured Err \n"] + (report.capstderr.splitlines(keepends=True) or [""])
+        lines += ["--- Captured Err ---\n"] + (report.capstderr.splitlines(keepends=True) or [""])
 
     return format_as_diagnostics(lines)

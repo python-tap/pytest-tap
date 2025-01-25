@@ -90,10 +90,10 @@ def test_logging(testdir, sample_test_file):
     result = testdir.runpytest_subprocess("--tap", "--tap-logging", "all")
     result.stdout.fnmatch_lines(
         [
-            "# Captured Log",
-            "# Captured Out",
-            "# Captured Err",
-            "*Running test_not_ok*"
+            "# --- Captured Log ---",
+            "*Running test_not_ok*",
+            "# --- Captured Out ---",
+            "# --- Captured Err ---",
         ]
     )
 
