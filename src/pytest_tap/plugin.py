@@ -175,16 +175,14 @@ def _make_as_diagnostics(report, tap_logging):
     """Format a report as TAP diagnostic output."""
     lines = report.longreprtext.splitlines(keepends=True)
 
-    content_all = format_as_diagnostics(lines)
-
     if tap_logging in ["log", "all"]:
-        content_all += format_as_diagnostics(" Captured Log ")
-        content_all += format_as_diagnostics(report.caplog.splitlines(keepends=True))
+        lines[-1] += "\n"
+        lines += [" Captured Log \n"] + (report.caplog.splitlines(keepends=True) or [""])
     if tap_logging in ["system-out", "out-err", "all"]:
-        content_all += format_as_diagnostics(" Captured Out ")
-        content_all += format_as_diagnostics(report.capstdout.splitlines(keepends=True))
+        lines[-1] += "\n"
+        lines += [" Captured Out \n"] + (report.capstdout.splitlines(keepends=True) or [""])
     if tap_logging in ["system-err", "out-err", "all"]:
-        content_all += format_as_diagnostics(" Captured Err ")
-        content_all += format_as_diagnostics(report.capstderr.splitlines(keepends=True))
+        lines[-1] += "\n"
+        lines += [" Captured Err \n"] + (report.capstderr.splitlines(keepends=True) or [""])
 
-    return content_all
+    return format_as_diagnostics(lines)
