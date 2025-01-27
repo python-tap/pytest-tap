@@ -99,6 +99,17 @@ def test_logging(testdir, sample_test_file):
     )
 
 
+def test_log_passing_tests(testdir, sample_test_file):
+    """Test logs are added to TAP diagnostics."""
+    result = testdir.runpytest_subprocess("--tap", "--tap-logging", "log", "--tap-log-passing-tests")
+    result.stdout.fnmatch_lines(
+        [
+            "# --- Captured Log ---",
+            "*Running test_ok*",
+        ]
+    )
+
+
 def test_xfail_no_reason(testdir):
     """xfails output gracefully when no reason is provided."""
     testdir.makepyfile(
