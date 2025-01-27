@@ -161,7 +161,7 @@ def pytest_addoption(parser):
         "--tap-log-passing-tests",
         default=False,
         action="store_true",
-        help="Capture log information for passing tests to TAP report"
+        help="Capture log information for passing tests to TAP report",
     )
 
 
