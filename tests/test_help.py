@@ -7,7 +7,7 @@ def test_includes_options(testdir):
         "*--tap-files*",
         "*--tap-combined*",
         "*--tap-outdir=path*",
-        "*--tap-logging*",
+        "*--tap-log-passing-tests*",
     ]
     result.stdout.fnmatch_lines(expected_option_flags)
 

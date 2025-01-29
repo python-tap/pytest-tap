@@ -88,7 +88,7 @@ def test_outdir(testdir, sample_test_file):
 
 def test_logging(testdir, sample_test_file):
     """Test logs are added to TAP diagnostics."""
-    result = testdir.runpytest_subprocess("--tap", "--tap-logging", "all")
+    result = testdir.runpytest_subprocess("--tap")
     result.stdout.fnmatch_lines(
         [
             "# --- Captured Log ---",
@@ -97,12 +97,13 @@ def test_logging(testdir, sample_test_file):
             "# --- Captured Err ---",
         ]
     )
+    result.stdout.no_fnmatch_line("*Running test_ok*")
 
 
 def test_log_passing_tests(testdir, sample_test_file):
     """Test logs are added to TAP diagnostics."""
     result = testdir.runpytest_subprocess(
-        "--tap", "--tap-logging", "log",
+        "--tap",
         "--tap-log-passing-tests", "--log-level", "INFO"
     )
     result.stdout.fnmatch_lines(
@@ -111,6 +112,7 @@ def test_log_passing_tests(testdir, sample_test_file):
             "*Running test_ok*",
         ]
     )
+    result.stdout.no_fnmatch_line("*Debug logging info*")
 
 
 def test_xfail_no_reason(testdir):

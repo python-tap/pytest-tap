@@ -6,8 +6,8 @@ from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
 SHOW_CAPTURE_LOG = ("log", "all")
-SHOW_CAPTURE_OUT = ("system-out", "out-err", "all")
-SHOW_CAPTUER_ERR = ("system-err", "out-err", "all")
+SHOW_CAPTURE_OUT = ("stdout", "all")
+SHOW_CAPTUER_ERR = ("stderr", "all")
 
 class TAPPlugin:
     def __init__(self, config: pytest.Config) -> None:
@@ -28,7 +28,7 @@ class TAPPlugin:
             # Disable it automatically for streaming.
             self._tracker.header = False
 
-        self.tap_logging = config.option.tap_logging
+        self.tap_logging = config.option.showcapture
         self.tap_log_passing_tests = config.option.tap_log_passing_tests
 
     @pytest.hookimpl()
@@ -150,14 +150,6 @@ def pytest_addoption(parser):
         help=(
             "An optional output directory to write TAP files to. "
             "If the directory does not exist, it will be created."
-        ),
-    )
-    group.addoption(
-        "--tap-logging",
-        default="no",
-        help=(
-            "Write captured log messages to TAP report: one of"
-            "no|log|system-out|system-err|out-err|all"
         ),
     )
     group.addoption(

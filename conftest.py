@@ -14,6 +14,7 @@ def sample_test_file(testdir):
 
         def test_ok():
             LOGGER.info("Running test_ok")
+            LOGGER.debug("Debug logging info")
             assert True
 
         def test_not_ok():
