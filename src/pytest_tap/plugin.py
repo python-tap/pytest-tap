@@ -5,6 +5,9 @@ import pytest
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
+SHOW_CAPTURE_LOG = ("log", "all")
+SHOW_CAPTURE_OUT = ("system-out", "out-err", "all")
+SHOW_CAPTUER_ERR = ("system-err", "out-err", "all")
 
 class TAPPlugin:
     def __init__(self, config: pytest.Config) -> None:
@@ -185,18 +188,21 @@ def _make_as_diagnostics(report, tap_logging):
     """Format a report as TAP diagnostic output."""
     lines = report.longreprtext.splitlines(keepends=True)
 
-    if tap_logging in ["log", "all"]:
-        lines[-1] += "\n"
+    if tap_logging in SHOW_CAPTURE_LOG:
+        if lines:
+            lines[-1] += "\n"
         lines += ["--- Captured Log ---\n"] + (
             report.caplog.splitlines(keepends=True) or [""]
         )
-    if tap_logging in ["system-out", "out-err", "all"]:
-        lines[-1] += "\n"
+    if tap_logging in SHOW_CAPTURE_OUT:
+        if lines:
+            lines[-1] += "\n"
         lines += ["--- Captured Out ---\n"] + (
             report.capstdout.splitlines(keepends=True) or [""]
         )
-    if tap_logging in ["system-err", "out-err", "all"]:
-        lines[-1] += "\n"
+    if tap_logging in SHOW_CAPTUER_ERR:
+        if lines:
+            lines[-1] += "\n"
         lines += ["--- Captured Err ---\n"] + (
             report.capstderr.splitlines(keepends=True) or [""]
         )
