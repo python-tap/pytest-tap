@@ -9,6 +9,7 @@ SHOW_CAPTURE_LOG = ("log", "all")
 SHOW_CAPTURE_OUT = ("stdout", "all")
 SHOW_CAPTUER_ERR = ("stderr", "all")
 
+
 class TAPPlugin:
     def __init__(self, config: pytest.Config) -> None:
         self._tracker = Tracker(
