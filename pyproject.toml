@@ -1,6 +1,6 @@
 [project]
 name = "pytest-tap"
-version = "3.4"
+version = "3.5"
 description = "Test Anything Protocol (TAP) reporting plugin for pytest"
 readme = "docs/releases.rst"
 authors = [

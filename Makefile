@@ -1,2 +1,2 @@
 test:
-	uv run pytest
+	uv run tox -e py312

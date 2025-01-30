@@ -29,8 +29,8 @@ class TAPPlugin:
             # Disable it automatically for streaming.
             self._tracker.header = False
 
-        self.tap_logging = config.option.showcapture
-        self.tap_log_passing_tests = config.option.tap_log_passing_tests
+        self.show_capture = config.option.showcapture
+        self.log_passing_tests = config.option.tap_log_passing_tests
 
     @pytest.hookimpl()
     def pytest_runtestloop(self, session):
@@ -78,11 +78,11 @@ class TAPPlugin:
                 self._tracker.add_ok(testcase, description, directive=directive)
         elif report.passed:
             diagnostics = None
-            if self.tap_log_passing_tests:
-                diagnostics = _make_as_diagnostics(report, self.tap_logging)
+            if self.log_passing_tests:
+                diagnostics = _make_as_diagnostics(report, self.show_capture)
             self._tracker.add_ok(testcase, description, diagnostics=diagnostics)
         elif report.failed:
-            diagnostics = _make_as_diagnostics(report, self.tap_logging)
+            diagnostics = _make_as_diagnostics(report, self.show_capture)
 
             # pytest treats an unexpected success from unitest.expectedFailure
             # as a failure.
@@ -177,23 +177,23 @@ def pytest_configure(config: pytest.Config) -> None:
         config.pluginmanager.register(TAPPlugin(config), "tapplugin")
 
 
-def _make_as_diagnostics(report, tap_logging):
+def _make_as_diagnostics(report, show_capture):
     """Format a report as TAP diagnostic output."""
     lines = report.longreprtext.splitlines(keepends=True)
 
-    if tap_logging in SHOW_CAPTURE_LOG:
+    if show_capture in SHOW_CAPTURE_LOG:
         if lines:
             lines[-1] += "\n"
         lines += ["--- Captured Log ---\n"] + (
             report.caplog.splitlines(keepends=True) or [""]
         )
-    if tap_logging in SHOW_CAPTURE_OUT:
+    if show_capture in SHOW_CAPTURE_OUT:
         if lines:
             lines[-1] += "\n"
         lines += ["--- Captured Out ---\n"] + (
             report.capstdout.splitlines(keepends=True) or [""]
         )
-    if tap_logging in SHOW_CAPTUER_ERR:
+    if show_capture in SHOW_CAPTUER_ERR:
         if lines:
             lines[-1] += "\n"
         lines += ["--- Captured Err ---\n"] + (
