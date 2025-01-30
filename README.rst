@@ -9,9 +9,6 @@ pytest-tap
 .. |license| image:: https://img.shields.io/pypi/l/pytest-tap.svg
     :target: https://raw.githubusercontent.com/python-tap/pytest-tap/master/LICENSE
     :alt: BSD license
-.. |coverage| image:: https://img.shields.io/codecov/c/github/python-tap/pytest-tap.svg
-    :target: https://codecov.io/github/python-tap/pytest-tap
-    :alt: Coverage
 
 Test Anything Protocol (TAP) reporting plugin for
 `pytest <http://pytest.org/latest/>`_
