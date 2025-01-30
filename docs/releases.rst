@@ -12,8 +12,8 @@ Additional developer documentation about Python and TAP is on
 Releases
 ========
 
-Version 3.5, To Be Released
----------------------------
+Version 3.5, January 30, 2025
+-----------------------------
 
 * Diagnostics now output logs, stdout, stderr for failed tests.
   Use the standard ``--show-capture`` flag to control the output.
