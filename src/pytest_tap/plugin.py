@@ -68,13 +68,13 @@ class TAPPlugin:
             # for that decorator.
             # Ignore the "reason: " from pytest.
             if report.wasxfail and report.wasxfail != "reason: ":
-                reason = ": {}".format(report.wasxfail)
+                reason = f": {report.wasxfail}"
 
             if report.skipped:
-                directive = "TODO expected failure{}".format(reason)
+                directive = f"TODO expected failure{reason}"
                 self._tracker.add_not_ok(testcase, description, directive=directive)
             elif report.passed:
-                directive = "TODO unexpected success{}".format(reason)
+                directive = f"TODO unexpected success{reason}"
                 self._tracker.add_ok(testcase, description, directive=directive)
         elif report.passed:
             diagnostics = None
@@ -104,7 +104,7 @@ class TAPPlugin:
                 self._tracker.add_not_ok(
                     testcase,
                     description,
-                    directive="unexpected success: {}".format(report.longrepr),
+                    directive=f"unexpected success: {report.longrepr}",
                 )
                 return
 
