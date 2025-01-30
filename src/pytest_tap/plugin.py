@@ -5,6 +5,10 @@ import pytest
 from tap.formatter import format_as_diagnostics
 from tap.tracker import Tracker
 
+SHOW_CAPTURE_LOG = ("log", "all")
+SHOW_CAPTURE_OUT = ("stdout", "all")
+SHOW_CAPTUER_ERR = ("stderr", "all")
+
 
 class TAPPlugin:
     def __init__(self, config: pytest.Config) -> None:
@@ -24,6 +28,9 @@ class TAPPlugin:
             # out a lot of line noise since every function gets its own header.
             # Disable it automatically for streaming.
             self._tracker.header = False
+
+        self.tap_logging = config.option.showcapture
+        self.tap_log_passing_tests = config.option.tap_log_passing_tests
 
     @pytest.hookimpl()
     def pytest_runtestloop(self, session):
@@ -70,9 +77,12 @@ class TAPPlugin:
                 directive = "TODO unexpected success{}".format(reason)
                 self._tracker.add_ok(testcase, description, directive=directive)
         elif report.passed:
-            self._tracker.add_ok(testcase, description)
+            diagnostics = None
+            if self.tap_log_passing_tests:
+                diagnostics = _make_as_diagnostics(report, self.tap_logging)
+            self._tracker.add_ok(testcase, description, diagnostics=diagnostics)
         elif report.failed:
-            diagnostics = _make_as_diagnostics(report)
+            diagnostics = _make_as_diagnostics(report, self.tap_logging)
 
             # pytest treats an unexpected success from unitest.expectedFailure
             # as a failure.
@@ -143,6 +153,12 @@ def pytest_addoption(parser):
             "If the directory does not exist, it will be created."
         ),
     )
+    group.addoption(
+        "--tap-log-passing-tests",
+        default=False,
+        action="store_true",
+        help="Capture log information for passing tests to TAP report",
+    )
 
 
 @pytest.hookimpl(trylast=True)
@@ -161,7 +177,27 @@ def pytest_configure(config: pytest.Config) -> None:
         config.pluginmanager.register(TAPPlugin(config), "tapplugin")
 
 
-def _make_as_diagnostics(report):
+def _make_as_diagnostics(report, tap_logging):
     """Format a report as TAP diagnostic output."""
     lines = report.longreprtext.splitlines(keepends=True)
+
+    if tap_logging in SHOW_CAPTURE_LOG:
+        if lines:
+            lines[-1] += "\n"
+        lines += ["--- Captured Log ---\n"] + (
+            report.caplog.splitlines(keepends=True) or [""]
+        )
+    if tap_logging in SHOW_CAPTURE_OUT:
+        if lines:
+            lines[-1] += "\n"
+        lines += ["--- Captured Out ---\n"] + (
+            report.capstdout.splitlines(keepends=True) or [""]
+        )
+    if tap_logging in SHOW_CAPTUER_ERR:
+        if lines:
+            lines[-1] += "\n"
+        lines += ["--- Captured Err ---\n"] + (
+            report.capstderr.splitlines(keepends=True) or [""]
+        )
+
     return format_as_diagnostics(lines)
