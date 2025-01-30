@@ -1,5 +1,27 @@
+pytest-tap is a reporting plugin for pytest that outputs
+`Test Anything Protocol (TAP) <http://testanything.org/>`_ data.
+TAP is a line based test protocol for recording test data in a standard way.
+
+Use ``pytest --tap`` after installing to get started.
+
+Follow `GitHub <https://github.com/python-tap/pytest-tap>`_
+for more information or to follow this plugin's development.
+Additional developer documentation about Python and TAP is on
+`Read the Docs <https://tappy.readthedocs.io/>`_.
+
 Releases
 ========
+
+Version 3.5, To Be Released
+---------------------------
+
+* Diagnostics now output logs, stdout, stderr for failed tests.
+  Use the standard ``--show-capture`` flag to control the output.
+* Diagnostics can display for passing tests using the
+  ``--tap-log-passing-tests`` flag.
+* Add support for Python 3.12.
+* Add support for Python 3.13.
+* Drop support for Python 3.8 (it is end-of-life).
 
 Version 3.4, July 15, 2023
 --------------------------
