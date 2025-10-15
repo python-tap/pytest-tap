@@ -57,6 +57,10 @@ class TAPPlugin:
             return
 
         description = str(report.location[0]) + "::" + str(report.location[2])
+        if hasattr(report, "sub_test_description"):
+            # Handle pytest-subtests plugin
+            description += report.sub_test_description()
+
         testcase = report.location[0]
 
         # Handle xfails first because they report in unusual ways.
