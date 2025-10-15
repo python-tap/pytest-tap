@@ -3,7 +3,7 @@ from tap.tracker import ENABLE_VERSION_13
 
 def test_stream(testdir, sample_test_file):
     """Results are streamed to stdout."""
-    result = testdir.runpytest_subprocess("--tap-stream")
+    result = testdir.runpytest_subprocess("--tap-stream", "-p", "no:subtests")
 
     result.stdout.fnmatch_lines(
         [
@@ -24,7 +24,6 @@ def test_stream_simple_flag(testdir, sample_test_file):
 
     result.stdout.fnmatch_lines(
         [
-            "1..6",
             "ok 1 test_stream_simple_flag.py::test_ok",
             "not ok 2 test_stream_simple_flag.py::test_not_ok",
             "ok 3 test_stream_simple_flag.py::test_params[foo]",
@@ -32,6 +31,7 @@ def test_stream_simple_flag(testdir, sample_test_file):
             "ok 5 test_stream_simple_flag.py::test_skipped # SKIP some reason",
             "not ok 6 test_stream_simple_flag.py::test_broken "
             "# TODO expected failure: a reason",
+            "1..6",
         ]
     )
 
@@ -114,8 +114,8 @@ def test_log_passing_tests(testdir, sample_test_file):
     result.stdout.no_fnmatch_line("*Debug logging info*")
 
 
-def test_log_subtests(testdir):
-    """Subtest logs are added to TAP diagnostics."""
+def test_log_subtests_stream(testdir):
+    """Subtests are added individually to stream."""
     testdir.makepyfile(
         """
         import pytest
@@ -130,12 +130,44 @@ def test_log_subtests(testdir):
 
     result.stdout.fnmatch_lines(
         [
-            "1..1",
-            "ok 1 test_log_subtests.py::test_subtests[sub_msg] (i=0)",
-            "not ok 2 test_log_subtests.py::test_subtests[sub_msg] (i=1)",
-            "ok 3 test_log_subtests.py::test_subtests",
+            "ok 1 test_log_subtests_stream.py::test_subtests[sub_msg] (i=0)",
+            "not ok 2 test_log_subtests_stream.py::test_subtests[sub_msg] (i=1)",
+            "ok 3 test_log_subtests_stream.py::test_subtests",
+            "1..3",
         ]
     )
+
+
+def test_log_subtests_combined(testdir):
+    """Subtests are added individually to combined."""
+    testdir.makepyfile(
+        """
+        import pytest
+
+        def test_subtests(subtests):
+            for i in range(2):
+                with subtests.test(msg="sub_msg", i=i):
+                    assert i % 2 == 0
+    """
+    )
+    testdir.runpytest_subprocess("--tap-combined")
+    testresults = testdir.tmpdir.join("testresults.tap")
+    assert testresults.check()
+    actual_results = [
+        line.strip() for line in testresults.readlines() if not line.startswith("#")
+    ]
+
+    expected_results = [
+        "1..3",
+        "ok 1 test_log_subtests_combined.py::test_subtests[sub_msg] (i=0)",
+        "not ok 2 test_log_subtests_combined.py::test_subtests[sub_msg] (i=1)",
+        "ok 3 test_log_subtests_combined.py::test_subtests",
+    ]
+
+    # If the dependencies for version 13 happen to be installed, tweak the output.
+    if ENABLE_VERSION_13:
+        expected_results.insert(0, "TAP version 13")
+    assert actual_results == expected_results
 
 
 def test_xfail_no_reason(testdir):
@@ -267,5 +299,5 @@ def test_setup_failure(testdir):
     result = testdir.runpytest_subprocess("--tap")
 
     result.stdout.fnmatch_lines(
-        ["1..1", "not ok 1 test_setup_failure.py::test_with_bad_fixture"]
+        ["not ok 1 test_setup_failure.py::test_with_bad_fixture", "1..1"]
     )

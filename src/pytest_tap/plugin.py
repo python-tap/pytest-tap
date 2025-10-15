@@ -36,13 +36,15 @@ class TAPPlugin:
     def pytest_runtestloop(self, session):
         """Output the plan line first."""
         option = session.config.option
-        if option.tap_stream or option.tap_combined:
+        if (option.tap_stream or option.tap_combined) and not (
+                session.config.pluginmanager.has_plugin("subtests")):
             self._tracker.set_plan(session.testscollected)
 
     @pytest.hookimpl(optionalhook=True)
     def pytest_xdist_node_collection_finished(self, node, ids):
         """Output the plan line first when using xdist."""
-        if self._tracker.streaming or self._tracker.combined:
+        if (self._tracker.streaming or self._tracker.combined) and not (
+                node.config.pluginmanager.has_plugin("subtests")):
             self._tracker.set_plan(len(ids))
 
     @pytest.hookimpl()
@@ -120,6 +122,9 @@ class TAPPlugin:
     @pytest.hookimpl()
     def pytest_unconfigure(self, config: pytest.Config):
         """Dump the results."""
+        if self._tracker.combined and config.pluginmanager.has_plugin("subtests"):
+            # Force Tracker to write plan at beginning of file
+            self._tracker.set_plan(self._tracker.combined_line_number)
         self._tracker.generate_tap_reports()
 
 
