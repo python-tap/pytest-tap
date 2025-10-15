@@ -114,6 +114,30 @@ def test_log_passing_tests(testdir, sample_test_file):
     result.stdout.no_fnmatch_line("*Debug logging info*")
 
 
+def test_log_subtests(testdir):
+    """Subtest logs are added to TAP diagnostics."""
+    testdir.makepyfile(
+        """
+        import pytest
+
+        def test_subtests(subtests):
+            for i in range(2):
+                with subtests.test(msg="sub_msg", i=i):
+                    assert i % 2 == 0
+    """
+    )
+    result = testdir.runpytest_subprocess("--tap")
+
+    result.stdout.fnmatch_lines(
+        [
+            "1..1",
+            "ok 1 test_log_subtests.py::test_subtests[sub_msg] (i=0)",
+            "not ok 2 test_log_subtests.py::test_subtests[sub_msg] (i=1)",
+            "ok 3 test_log_subtests.py::test_subtests",
+        ]
+    )
+
+
 def test_xfail_no_reason(testdir):
     """xfails output gracefully when no reason is provided."""
     testdir.makepyfile(
