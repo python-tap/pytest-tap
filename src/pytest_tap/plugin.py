@@ -37,14 +37,16 @@ class TAPPlugin:
         """Output the plan line first."""
         option = session.config.option
         if (option.tap_stream or option.tap_combined) and not (
-                session.config.pluginmanager.has_plugin("subtests")):
+            session.config.pluginmanager.has_plugin("subtests")
+        ):
             self._tracker.set_plan(session.testscollected)
 
     @pytest.hookimpl(optionalhook=True)
     def pytest_xdist_node_collection_finished(self, node, ids):
         """Output the plan line first when using xdist."""
         if (self._tracker.streaming or self._tracker.combined) and not (
-                node.config.pluginmanager.has_plugin("subtests")):
+            node.config.pluginmanager.has_plugin("subtests")
+        ):
             self._tracker.set_plan(len(ids))
 
     @pytest.hookimpl()
