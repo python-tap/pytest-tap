@@ -1,3 +1,6 @@
+[run]
+patch = subprocess
+
 [paths]
 source =
     src/pytest_tap
