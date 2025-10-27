@@ -29,7 +29,7 @@ jobs:
 
       - name: Run tox
         # Run tox using the version of Python in `PATH`
-        run: tox -e py
+        run: tox run-parallel -e py,subtests
 
   coverage:
     needs: build

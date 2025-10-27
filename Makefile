@@ -1,2 +1,2 @@
 test:
-	uv run tox -e py312
+	uv run tox run-parallel -e py312, subtests
