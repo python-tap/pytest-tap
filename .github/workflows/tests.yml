@@ -47,7 +47,7 @@ jobs:
         run: pip install tox
 
       - name: Collect coverage data
-        run: tox -e coverage
+        run: tox run-parallel -e coverage,subtests-coverage
 
       - name: Combine coverage & fail if it's <100%
         run: |
