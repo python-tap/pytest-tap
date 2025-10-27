@@ -40,8 +40,9 @@ def test_log_subtests_combined(testdir):
                     assert i % 2 == 0
     """
     )
-    testdir.runpytest_subprocess("--tap-combined")
-    testresults = testdir.tmpdir.join("testresults.tap")
+    testdir.runpytest_subprocess("--tap-outdir", "subtest-results", "--tap-combined")
+    outdir = testdir.tmpdir.join("subtest-results")
+    testresults = outdir.join("testresults.tap")
     assert testresults.check()
     actual_results = [
         line.strip() for line in testresults.readlines() if not line.startswith("#")
