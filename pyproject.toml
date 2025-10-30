@@ -47,7 +47,6 @@ include = [
     "/docs",
     "/tests",
 ]
-sources = ["src"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pytest_tap"]
