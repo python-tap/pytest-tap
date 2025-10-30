@@ -47,11 +47,9 @@ include = [
     "/docs",
     "/tests",
 ]
-sources = ["src"]
 
 [tool.hatch.build.targets.wheel]
-sources = ["src"]
-packages = ["pytest_tap"]
+packages = ["src/pytest_tap"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
