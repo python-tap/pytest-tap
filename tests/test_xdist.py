@@ -23,6 +23,7 @@ def test_sets_plan_streaming(combined, stream, expected):
     config.option.tap_stream = stream
     plugin = TAPPlugin(config)
     node = mock.Mock()
+    node.config.pluginmanager.has_plugin = lambda x: x != "subtests"
     test_ids = ["a", "b", "c"]
 
     plugin.pytest_xdist_node_collection_finished(node, test_ids)
