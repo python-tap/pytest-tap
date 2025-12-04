@@ -3,7 +3,8 @@ import sys
 
 import pytest
 from tap.formatter import format_as_diagnostics
-from tap.tracker import Tracker
+from tap.tracker import Tracker, ENABLE_VERSION_13
+
 
 SHOW_CAPTURE_LOG = ("log", "all")
 SHOW_CAPTURE_OUT = ("stdout", "all")
@@ -83,6 +84,7 @@ class TAPPlugin:
             self._tracker.add_ok(testcase, description, diagnostics=diagnostics)
         elif report.failed:
             diagnostics = _make_as_diagnostics(report, self.show_capture)
+            raw_yaml_block = _make_as_raw_yaml_block(report) if ENABLE_VERSION_13 else None
 
             # pytest treats an unexpected success from unitest.expectedFailure
             # as a failure.
@@ -108,7 +110,7 @@ class TAPPlugin:
                 )
                 return
 
-            self._tracker.add_not_ok(testcase, description, diagnostics=diagnostics)
+            self._tracker.add_not_ok(testcase, description, diagnostics=diagnostics, raw_yaml_block=raw_yaml_block)
         elif report.skipped:
             reason = report.longrepr[2].split(":", 1)[1].strip()  # type: ignore
             self._tracker.add_skip(testcase, description, reason)
@@ -201,3 +203,16 @@ def _make_as_diagnostics(report, show_capture):
         )
 
     return format_as_diagnostics(lines)
+
+
+def _make_as_raw_yaml_block(report):
+    try:
+        lines = report.longrepr.reprcrash.message.splitlines(keepends=True)
+    except AttributeError:
+        lines = report.longreprtext.splitlines(keepends=True)
+    return f"""\
+message: |
+{''.join(f'  {line}' for line in lines)}
+severity: {report.outcome}
+duration_ms: {report.duration * 1000}
+"""
