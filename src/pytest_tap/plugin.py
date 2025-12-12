@@ -222,5 +222,5 @@ message: |
 {"".join(f"  {line}" for line in lines)}
 severity: {report.outcome}
 duration_ms: {report.duration * 1000}
-{"\n".join(f"{k}: {v}" for k, v in user_properties)}
+{"\n".join(f"{k}: {v}" for k, v in user_properties) if user_properties else ""}
 """
