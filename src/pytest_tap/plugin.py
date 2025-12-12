@@ -216,10 +216,11 @@ def _make_as_raw_yaml_block(report):
         lines = report.longrepr.reprcrash.message.splitlines(keepends=True)
     except AttributeError:
         lines = report.longreprtext.splitlines(keepends=True)
-    user_properties = getattr(report, "user_properties", [])
-    return f"""{"\n".join(f"{k}: {v}" for k, v in user_properties)}\
+    res = f"""\
 message: |
 {"".join(f"  {line}" for line in lines)}
 severity: {report.outcome}
-duration_ms: {report.duration * 1000}
-"""
+duration_ms: {report.duration * 1000}"""
+    if hasattr(report, "user_properties"):
+        res += "\n" + "\n".join(f'{k}: {v}' for k, v in report.user_properties)
+    return res
