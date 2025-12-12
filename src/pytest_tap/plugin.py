@@ -222,5 +222,5 @@ message: |
 severity: {report.outcome}
 duration_ms: {report.duration * 1000}"""
     if hasattr(report, "user_properties"):
-        res += "\n" + "\n".join(f'{k}: {v}' for k, v in report.user_properties)
+        res += "\n" + "\n".join(f"{k}: {v}" for k, v in report.user_properties)
     return res
