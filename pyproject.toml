@@ -34,7 +34,6 @@ tap = "pytest_tap.plugin"
 [dependency-groups]
 dev = [
     "pytest-tap",
-    "pytest-subtests",
     "tox>=4.24.1",
 ]
 
@@ -54,7 +53,6 @@ packages = ["src/pytest_tap"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
-markers = ["subtests"]
 
 [tool.uv.sources]
 pytest-tap = { workspace = true }

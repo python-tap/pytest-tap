@@ -29,7 +29,7 @@ jobs:
 
       - name: Run tox
         # Run tox using the version of Python in `PATH`
-        run: tox run-parallel -e py,subtests
+        run: tox -e py
 
   coverage:
     needs: build
@@ -47,7 +47,7 @@ jobs:
         run: pip install tox
 
       - name: Collect coverage data
-        run: tox run-parallel -e coverage,subtests-coverage
+        run: tox -e coverage
 
       - name: Combine coverage & fail if it's <100%
         run: |
