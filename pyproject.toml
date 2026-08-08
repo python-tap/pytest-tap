@@ -46,6 +46,7 @@ include = [
     "/src",
     "/docs",
     "/tests",
+    "/conftest.py",
 ]
 
 [tool.hatch.build.targets.wheel]
