@@ -131,7 +131,11 @@ def pytest_addoption(parser):
     )
     # Deprecated, but keeping for backwards compatibility.
     group.addoption(
-        "--tap-stream", default=False, action="store_true", help=argparse.SUPPRESS
+        "--tap-stream",
+        default=False,
+        dest="tap_stream",
+        action="store_true",
+        help=argparse.SUPPRESS,
     )
     group.addoption(
         "--tap-files",
