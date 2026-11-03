@@ -12,6 +12,12 @@ Additional developer documentation about Python and TAP is on
 Releases
 ========
 
+Unreleased
+----------
+
+* Drop support for Python 3.9 and 3.10 (they are end-of-life).
+* Add support for Python 3.14 and 3.15.
+
 Version 3.5, January 30, 2025
 -----------------------------
 
