@@ -12,11 +12,16 @@ Additional developer documentation about Python and TAP is on
 Releases
 ========
 
-Unreleased
-----------
+Version 3.6, November 10, 2026
+-------------------------------
 
 * Drop support for Python 3.9 and 3.10 (they are end-of-life).
 * Add support for Python 3.14 and 3.15.
+* Fix compatibility with pytest 9.2 when registering the deprecated
+  ``--tap-stream`` option.
+* Fix the wheel so that it includes the ``pytest_tap`` package.
+* Include ``conftest.py`` in the source distribution so downstream packagers
+  can run the test suite from the published archive.
 
 Version 3.5, January 30, 2025
 -----------------------------
