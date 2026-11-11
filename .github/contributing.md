@@ -27,6 +27,6 @@ Other contributors are free to ignore this.
 1. Update `docs/releases.rst`.
 2. Update version in `pyproject.toml` and `src/pytest_tap/__init__.py`.
 3. `rm -rf dist && uv build`
-4. `uv publish`
+4. `uv publish` (needs `export UV_PUBLISH_TOKEN=$(wl-paste)` with the token in the clipboard)
 5. `git tag -a vX.X -m "Version X.X"`
 6. `git push --tags`
